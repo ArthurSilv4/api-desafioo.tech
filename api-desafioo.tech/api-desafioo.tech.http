@@ -1,0 +1,6 @@
+@api_desafioo.tech_HostAddress = http://localhost:5222
+
+GET {{api_desafioo.tech_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

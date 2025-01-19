@@ -1,0 +1,53 @@
+services:
+  api-desafioo.tech:
+    container_name: ApiDesafiooTech
+    image: ${DOCKER_REGISTRY-}apidesafiootech
+    build:
+      context: .
+      dockerfile: api-desafioo.tech/Dockerfile
+    ports:
+        - "8080:80"
+    depends_on:
+        - database-desafioo.tech
+        - cache-desafioo.tech
+        - smtp-desafio.tech
+    networks:
+        - desafio.tech-network
+
+
+  database-desafioo.tech:
+    container_name: SqlServer
+    image: mcr.microsoft.com/azure-sql-edge
+    environment:
+      - ACCEPT_EULA=1
+      - MSSQL_SA_PASSWORD=Password123 
+    volumes:
+      - dbdata:/var/opt/mssql
+    ports:
+        - 1433:1433
+    networks:
+        - desafio.tech-network
+
+  cache-desafioo.tech:
+    container_name: Redis
+    image: redis
+    ports:
+        - "6379:6379"
+    networks:
+        - desafio.tech-network
+
+  smtp-desafio.tech:
+    container_name: MailHog
+    image: mailhog/mailhog
+    ports:
+        - "1025:1025"
+        - "8025:8025"
+    networks:
+        - desafio.tech-network
+
+volumes:
+  dbdata:
+  
+networks:
+  desafio.tech-network:
+    driver: bridge
