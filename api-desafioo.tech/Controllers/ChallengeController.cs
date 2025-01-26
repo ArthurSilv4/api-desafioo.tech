@@ -20,6 +20,14 @@ namespace api_desafioo.tech.Controllers
             _context = context;
         }
 
+        [HttpGet("ListChallenge")]
+        public async Task<IActionResult> ListChallenge(CancellationToken ct)
+        {
+            var challenges = await _context.Challenges.ToListAsync(ct);
+            var challengeDtos = challenges.Select(c => new ChallengeDto(c.Id, c.Title, c.Description, c.Dificulty, c.Category, c.AuthorName, c.Links)).ToList();
+            return Ok(challengeDtos);
+        }
+
         [HttpPost("CreateNewChallenge")]
         [Authorize]
         public async Task<IActionResult> CreateNewChallenge([FromBody] CreateNewChallengeRequest request, CancellationToken ct)
