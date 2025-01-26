@@ -21,5 +21,15 @@
             IsActivated = true;
             CreatedAt = DateTime.Now;
         }
+
+        public void UpdatePassword(string newPassword)
+        {
+            Password = newPassword;
+        }
+
+        public void UpdateName(string newName)
+        {
+            Name = newName;
+        }
     }
 }
