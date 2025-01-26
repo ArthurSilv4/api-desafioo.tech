@@ -9,6 +9,8 @@
         public string[] Roles { get; private set; }
         public bool IsActivated { get; private set; }
 
+        public ICollection<Challenge> Challenges { get; private set; }
+
         public DateTime CreatedAt { get; private set; }
 
         public User(string name, string email, string password)
@@ -20,6 +22,7 @@
             Roles = new string[] { "User" };
             IsActivated = true;
             CreatedAt = DateTime.Now;
+            Challenges = new List<Challenge>();
         }
 
         public void UpdatePassword(string newPassword)

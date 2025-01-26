@@ -1,4 +1,5 @@
 ﻿using api_desafioo.tech.Context;
+using api_desafioo.tech.Dto;
 using api_desafioo.tech.Models;
 using api_desafioo.tech.Requests;
 using Microsoft.AspNetCore.Authorization;
@@ -39,7 +40,9 @@ namespace api_desafioo.tech.Controllers
             await _context.Users.AddAsync(user, ct);
             await _context.SaveChangesAsync(ct);
 
-            return Ok("Usuário criado com sucesso.");
+            var userDto = new UserDto(user.Name, user.Email, user.Roles);
+
+            return Ok(userDto);
         }
 
         [HttpPut("UpdateUserName")]

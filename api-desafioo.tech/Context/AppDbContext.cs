@@ -10,6 +10,18 @@ namespace api_desafioo.tech.Context
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Challenge> Challenges { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Challenge>()
+                .HasOne(c => c.Author)
+                .WithMany(u => u.Challenges)
+                .HasForeignKey(c => c.AuthorId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 
 }
