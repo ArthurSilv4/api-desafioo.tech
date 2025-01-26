@@ -1,4 +1,5 @@
 ﻿using api_desafioo.tech.Context;
+using api_desafioo.tech.Models;
 using api_desafioo.tech.Requests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,6 +17,29 @@ namespace api_desafioo.tech.Controllers
         public UserController(AppDbContext context)
         {
             _context = context;
+        }
+
+        [HttpPost("CreateNewUser")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateNewUser([FromBody] CreateNewUserRequest request, CancellationToken ct)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+
+            var userRoleClaim = User.FindFirst(ClaimTypes.Role);
+            if (userRoleClaim == null || userRoleClaim.Value != "Admin")
+            {
+                return Forbid("Você não tem permissão para criar um novo usuário.");
+            }
+
+            var user = new User(request.name, request.email, BCrypt.Net.BCrypt.HashPassword(request.password));
+            await _context.Users.AddAsync(user, ct);
+            await _context.SaveChangesAsync(ct);
+
+            return Ok("Usuário criado com sucesso.");
         }
 
         [HttpPut("UpdateUserName")]

@@ -9,11 +9,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 JwtConfig.Initialize(builder.Configuration);
-
 
 builder.Services.AddControllers();
 
@@ -21,8 +19,6 @@ builder.Services.AddFluentValidationAutoValidation()
                 .AddFluentValidationClientsideAdapters();
 
 builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UpdatePasswordValidator>();
-builder.Services.AddValidatorsFromAssemblyContaining<UpdateUserNameValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
 
