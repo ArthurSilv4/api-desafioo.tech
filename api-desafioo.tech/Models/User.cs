@@ -1,4 +1,6 @@
-﻿namespace api_desafioo.tech.Models
+﻿using api_desafioo.tech.Helpers;
+
+namespace api_desafioo.tech.Models
 {
     public class User
     {
@@ -21,7 +23,7 @@
             Password = password;
             Roles = new string[] { "User" };
             IsActivated = true;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTimeHelper.GetBrasiliaTime();
             Challenges = new List<Challenge>();
         }
 

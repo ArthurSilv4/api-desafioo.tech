@@ -11,6 +11,7 @@ namespace api_desafioo.tech.Context
 
         public DbSet<User> Users { get; set; }
         public DbSet<Challenge> Challenges { get; set; }
+        public DbSet<ChallengeParticipant> ChallengeParticipants { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -8,10 +8,12 @@ using api_desafioo.tech.Validators;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using api_desafioo.tech.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 JwtConfig.Initialize(builder.Configuration);
+SmtpConfig.Initialize(builder.Configuration);
 
 builder.Services.AddControllers();
 
@@ -21,6 +23,7 @@ builder.Services.AddFluentValidationAutoValidation()
 builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
 
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddTransient<IEmail, EmailService>();
 
 builder.Services.AddSwaggerGen(options =>
 {

@@ -1,4 +1,6 @@
-﻿namespace api_desafioo.tech.Models
+﻿using api_desafioo.tech.Helpers;
+
+namespace api_desafioo.tech.Models
 {
     public class Challenge
     {
@@ -25,7 +27,7 @@
             Description = description;
             Dificulty = dificulty;
             Category = category;
-            CreatedAt = DateTime.Now;
+            CreatedAt = DateTimeHelper.GetBrasiliaTime();
             Author = author;
             AuthorId = author.Id;
             AuthorName = author.Name;
