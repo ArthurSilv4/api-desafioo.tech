@@ -11,13 +11,18 @@ namespace api_desafioo.tech.Models
         public DateTime FirstChallengeDate { get; private set; }
         public DateTime LastChallengeDate { get; private set; }
 
-        public ChallengeParticipant(string name, string email)
+        public ICollection<Challenge> Challenges { get; private set; }
+        public Guid ChallengeId { get; private set; }
+
+        public ChallengeParticipant(string name, string email, Guid challengeId)
         {
             Id = Guid.NewGuid();
             Name = name;
             Email = email;
             FirstChallengeDate = DateTimeHelper.GetBrasiliaTime();
             LastChallengeDate = DateTimeHelper.GetBrasiliaTime();
+            Challenges = new List<Challenge>();
+            ChallengeId = challengeId;
         }
 
         public void UpdateLastChallengeDate(DateTime newDate)

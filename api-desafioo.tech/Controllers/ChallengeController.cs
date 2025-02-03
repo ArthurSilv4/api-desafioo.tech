@@ -66,7 +66,7 @@ namespace api_desafioo.tech.Controllers
                 return Ok(dto);
             }
 
-            var newParticipant = new ChallengeParticipant(request.name, request.email);
+            var newParticipant = new ChallengeParticipant(request.name, request.email, challengeId);
 
             await _context.ChallengeParticipants.AddAsync(newParticipant, ct);
             await _context.SaveChangesAsync(ct);
