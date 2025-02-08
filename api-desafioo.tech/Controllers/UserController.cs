@@ -20,6 +20,28 @@ namespace api_desafioo.tech.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> GetUser(CancellationToken ct)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+            if (!Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("ID de usuário inválido.");
+            }
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId, ct);
+            if (user == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+            var userDto = new UserDto(user.Name, user.Description, user.Email, user.Roles);
+            return Ok(userDto);
+        }
+
         [HttpPost("CreateNewUser")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateNewUser([FromBody] CreateNewUserRequest request, CancellationToken ct)
@@ -40,7 +62,7 @@ namespace api_desafioo.tech.Controllers
             await _context.Users.AddAsync(user, ct);
             await _context.SaveChangesAsync(ct);
 
-            var userDto = new UserDto(user.Name, user.Email, user.Roles);
+            var userDto = new UserDto(user.Name, user.Description, user.Email, user.Roles);
 
             return Ok(userDto);
         }
@@ -70,6 +92,30 @@ namespace api_desafioo.tech.Controllers
             _context.Users.Update(user);
             await _context.SaveChangesAsync(ct);
             return Ok("Nome de usuário atualizado com sucesso.");
+        }
+
+        [HttpPut("UpdateDescription")]
+        [Authorize]
+        public async Task<IActionResult> UpdateDescription([FromBody] UpdateDescriptionRequest request, CancellationToken ct)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+            if (!Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("ID de usuário inválido.");
+            }
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId, ct);
+            if (user == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+            user.UpdateDescription(request.newDescription);
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync(ct);
+            return Ok("Descrição atualizada com sucesso.");
         }
 
         [HttpPut("UpdatePassword")]

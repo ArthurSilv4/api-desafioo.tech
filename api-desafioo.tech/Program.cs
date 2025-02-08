@@ -83,10 +83,21 @@ builder.Services.AddTransient<TokenService>();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DevelopmentCorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.UseCors("DevelopmentCorsPolicy");
     app.UseSwagger();
     app.UseSwaggerUI();
 }

@@ -1,4 +1,5 @@
 ﻿using api_desafioo.tech.Helpers;
+using Markdig;
 
 namespace api_desafioo.tech.Models
 {
@@ -6,6 +7,7 @@ namespace api_desafioo.tech.Models
     {
         public Guid Id { get; init; }
         public string Name { get; private set; }
+        public string Description { get; private set; }
         public string Email { get; private set; }
         public string Password { get; private set; }
         public string[] Roles { get; private set; }
@@ -19,6 +21,7 @@ namespace api_desafioo.tech.Models
         {
             Id = Guid.NewGuid();
             Name = name;
+            Description = "";
             Email = email;
             Password = password;
             Roles = new string[] { "User" };
@@ -35,6 +38,11 @@ namespace api_desafioo.tech.Models
         public void UpdateName(string newName)
         {
             Name = newName;
+        }
+
+        public void UpdateDescription(string newDescription)
+        {
+            Description = Markdown.ToHtml(newDescription); 
         }
     }
 }
