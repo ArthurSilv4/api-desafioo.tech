@@ -132,7 +132,13 @@ namespace api_desafioo.tech.Controllers
             {
                 return Unauthorized();
             }
-            challenge.Update(request.title, request.description, request.dificulty, request.category, request.links);
+            challenge.Update(
+                request.title ?? challenge.Title,
+                request.description ?? challenge.Description,
+                request.dificulty ?? challenge.Dificulty,
+                request.category ?? challenge.Category,
+                request.links ?? challenge.Links
+            );
             _context.Challenges.Update(challenge);
             await _context.SaveChangesAsync(ct);
             var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
