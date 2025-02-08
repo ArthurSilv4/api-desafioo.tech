@@ -52,8 +52,7 @@ namespace api_desafioo.tech.Controllers
                 _context.ChallengeParticipants.Update(existingParticipant);
                 await _context.SaveChangesAsync(ct);
 
-                emailBody = $"Olá {existingParticipant.Name}, você iniciou o desafio {challenge.Title}!";
-                sendEmail = _email.SendEmail(existingParticipant.Email, "Desafio iniciado", emailBody);
+                sendEmail = _email.SendChallengeStartedEmail(existingParticipant.Email, existingParticipant.Name, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
 
                 if (!sendEmail)
                 {
@@ -63,7 +62,7 @@ namespace api_desafioo.tech.Controllers
                 var challengedto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
                 var dto = new ChallengeParticipantDto(existingParticipant.Name, existingParticipant.Email, challengedto);
 
-                return Ok(dto);
+                return Ok(new { message = "Desafio iniciado", dto });
             }
 
             var newParticipant = new ChallengeParticipant(request.name, request.email, challengeId);
@@ -71,8 +70,7 @@ namespace api_desafioo.tech.Controllers
             await _context.ChallengeParticipants.AddAsync(newParticipant, ct);
             await _context.SaveChangesAsync(ct);
 
-            emailBody = $"Olá {newParticipant.Name}, você iniciou o desafio {challenge.Title}!";
-            sendEmail = _email.SendEmail(newParticipant.Email, "Desafio iniciado", emailBody);
+            sendEmail = _email.SendChallengeStartedEmail(newParticipant.Email, newParticipant.Name, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
 
             if (!sendEmail)
             {
@@ -82,7 +80,7 @@ namespace api_desafioo.tech.Controllers
             var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
             var Dto = new ChallengeParticipantDto(newParticipant.Name, newParticipant.Email, challengeDto);
 
-            return Ok(Dto);
+            return Ok(new { message = "Desafio iniciado", Dto });
         }
 
         [HttpPost("CreateNewChallenge")]
