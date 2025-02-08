@@ -112,6 +112,35 @@ namespace api_desafioo.tech.Controllers
             return Ok(challengeDto);
         }
 
+        [HttpPut("UpdateChallenge")]
+        [Authorize]
+        public async Task<IActionResult> UpdateChallenge(Guid challengeId, UpdateChallengeRequest request, CancellationToken ct)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+            if (!Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("ID de usuário inválido.");
+            }
+            var challenge = await _context.Challenges.FindAsync(new object[] { challengeId }, ct);
+            if (challenge == null)
+            {
+                return NotFound("Desafio não encontrado.");
+            }
+            if (challenge.AuthorId != userId)
+            {
+                return Unauthorized();
+            }
+            challenge.Update(request.title, request.description, request.dificulty, request.category, request.links);
+            _context.Challenges.Update(challenge);
+            await _context.SaveChangesAsync(ct);
+            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
+            return Ok(new { message = "Desafio editado", challengeDto });
+        }
+
         [HttpDelete("DeleteChallenge")]
         [Authorize]
         public async Task<IActionResult> DeleteChallenge(Guid challengeId, CancellationToken ct)

@@ -33,5 +33,14 @@ namespace api_desafioo.tech.Models
             AuthorName = author.Name;
             Links = links ?? new List<string>();
         }
+
+        public void Update(string title, string description, string dificulty, string category, List<string>? links)
+        {
+            Title = title;
+            Description = description;
+            Dificulty = dificulty;
+            Category = category;
+            Links = links ?? new List<string>();
+        }
     }
 }
