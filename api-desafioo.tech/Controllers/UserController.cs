@@ -1,7 +1,7 @@
 ﻿using api_desafioo.tech.Context;
 using api_desafioo.tech.Dto;
 using api_desafioo.tech.Models;
-using api_desafioo.tech.Requests;
+using api_desafioo.tech.Requests.UserRequests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

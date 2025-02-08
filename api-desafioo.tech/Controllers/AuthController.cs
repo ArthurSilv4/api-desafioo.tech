@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using api_desafioo.tech.Requests;
 using api_desafioo.tech.Context;
 using Microsoft.EntityFrameworkCore;
 using api_desafioo.tech.Services;
+using api_desafioo.tech.Requests.AuthRequests;
 
 namespace api_desafioo.tech.Controllers
 {

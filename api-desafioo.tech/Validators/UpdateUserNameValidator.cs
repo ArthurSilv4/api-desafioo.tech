@@ -1,4 +1,4 @@
-﻿using api_desafioo.tech.Requests;
+﻿using api_desafioo.tech.Requests.UserRequests;
 using FluentValidation;
 
 namespace api_desafioo.tech.Validators

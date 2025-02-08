@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using api_desafioo.tech.Requests;
+using api_desafioo.tech.Requests.AuthRequests;
 
 namespace api_desafioo.tech.Validators
 {
