@@ -30,6 +30,8 @@ namespace api_desafioo.tech.Models
             IsActivated = true;
             CreatedAt = DateTimeHelper.GetBrasiliaTime();
             Challenges = new List<Challenge>();
+            RefreshToken = "";
+            RefreshTokenExpiryTime = DateTime.MinValue;
         }
 
         public void UpdatePassword(string newPassword)

@@ -11,6 +11,7 @@ using System.Text;
 using api_desafioo.tech.Helpers;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +85,14 @@ builder.Services.AddTransient<TokenService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
+
+var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
+if (string.IsNullOrWhiteSpace(redisConnectionString))
+{
+    throw new ArgumentNullException("RedisConnection", "Connection string for Redis is missing");
+}
+builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+
 
 builder.Services.AddCors(options =>
 {

@@ -1,10 +1,12 @@
 ﻿using api_desafioo.tech.Context;
 using api_desafioo.tech.Dto;
+using api_desafioo.tech.Helpers;
 using api_desafioo.tech.Models;
 using api_desafioo.tech.Requests.UserRequests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StackExchange.Redis;
 using System.Security.Claims;
 
 namespace api_desafioo.tech.Controllers
@@ -14,10 +16,14 @@ namespace api_desafioo.tech.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IEmail _email;
+        private readonly IConnectionMultiplexer _redis;
 
-        public UserController(AppDbContext context)
+        public UserController(AppDbContext context, IEmail email, IConnectionMultiplexer redis)
         {
             _context = context;
+            _email = email;
+            _redis = redis;
         }
 
         [HttpGet]
@@ -41,7 +47,7 @@ namespace api_desafioo.tech.Controllers
             var userDto = new UserDto(user.Name, user.Description, user.Email, user.Roles);
             return Ok(userDto);
         }
-
+      
         [HttpPost("CreateNewUser")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateNewUser([FromBody] CreateNewUserRequest request, CancellationToken ct)
@@ -118,6 +124,41 @@ namespace api_desafioo.tech.Controllers
             return Ok("Descrição atualizada com sucesso.");
         }
 
+        [HttpPost("SendConfirmationEmail")]
+        [Authorize]
+        public async Task<IActionResult> SendConfirmationEmail(CancellationToken ct)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+            if (!Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("ID de usuário inválido.");
+            }
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId, ct);
+            if (user == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+
+            var code = GenerateEmailConfirmationCode.GenerateCode();
+
+            var cacheKey = $"confirmation_code_{userId}";
+            var cacheValue = code;
+            var cacheExpiry = TimeSpan.FromMinutes(10);
+
+            var db = _redis.GetDatabase();
+            await db.StringSetAsync(cacheKey, cacheValue, cacheExpiry);
+
+            bool sendEmail = _email.SendConfirmationEmail(user.Email, user.Name, code);
+
+            var userDto = new UserDto(user.Name, user.Description, user.Email, user.Roles);
+
+            return Ok(new { message = "Código enviado", userDto });
+        }
+
         [HttpPut("UpdatePassword")]
         [Authorize]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request, CancellationToken ct)
@@ -139,6 +180,14 @@ namespace api_desafioo.tech.Controllers
                 return NotFound("Usuário não encontrado.");
             }
 
+            var db = _redis.GetDatabase();
+            var cacheKey = $"confirmation_code_{userId}";
+            var cachedCode = await db.StringGetAsync(cacheKey);
+            if (string.IsNullOrEmpty(cachedCode) || request.code != cachedCode)
+            {
+                return BadRequest("Código de confirmação não encontrado ou expirado.");
+            }
+
             if (!BCrypt.Net.BCrypt.Verify(request.oldPassword, user.Password))
             {
                 return BadRequest("A senha antiga está incorreta.");
@@ -148,7 +197,9 @@ namespace api_desafioo.tech.Controllers
             _context.Users.Update(user);
             await _context.SaveChangesAsync(ct);
 
-            return Ok("Senha atualizada com sucesso.");
+            var userDto = new UserDto(user.Name, user.Description, user.Email, user.Roles);
+
+            return Ok(new { message = "Senha atualizada com sucesso.", userDto });
         }
     }
 }

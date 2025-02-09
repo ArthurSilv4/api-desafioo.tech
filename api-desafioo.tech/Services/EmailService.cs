@@ -115,5 +115,61 @@ namespace api_desafioo.tech.Services
                 </html>";
             return SendEmail(to, subject, body);
         }
+
+        public bool SendConfirmationEmail(string to, string name, string confirmationCode)
+        {
+            var subject = "Confirme seu e-mail";
+            var body = $@"
+        <html>
+        <head>
+            <style>
+                body {{
+                    font-family: Arial, sans-serif;
+                    line-height: 1.6;
+                }}
+                .container {{
+                    width: 80%;
+                    margin: auto;
+                    padding: 20px;
+                    border: 1px solid #ddd;
+                    border-radius: 10px;
+                    background-color: #f9f9f9;
+                }}
+                .header {{
+                    text-align: center;
+                    padding-bottom: 20px;
+                }}
+                .content {{
+                    margin-top: 20px;
+                }}
+                .footer {{
+                    margin-top: 30px;
+                    text-align: center;
+                    font-size: 0.9em;
+                    color: #777;
+                }}
+            </style>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='header'>
+                    <h1>Confirme seu e-mail</h1>
+                </div>
+                <div class='content'>
+                    <p>Olá, {name}</p>
+                    <p>Para confirmar seu e-mail, copie o código abaixo e cole no campo de confirmação:</p>
+                    <p><strong>{confirmationCode}</strong></p>
+                    <p>Se você não solicitou a confirmação de e-mail, por favor, ignore este e-mail.</p>
+                </div>
+                <div class='footer'>
+                    <p>Atenciosamente,</p>
+                    <p>Equipe Desafioo.tech</p>
+                </div>
+            </div>
+        </body>
+        </html>";
+
+            return SendEmail(to, subject, body);
+        }
     }
 }

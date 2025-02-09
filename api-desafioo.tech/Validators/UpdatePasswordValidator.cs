@@ -13,6 +13,8 @@ namespace api_desafioo.tech.Validators
                 .NotEmpty().WithMessage("A nova senha é obrigatória.")
                 .MinimumLength(8).WithMessage("A nova senha deve ter mais de 8 dígitos.")
                 .Matches(@"[!@#$%^&*(),.?""{}|<>]").WithMessage("A nova senha deve conter pelo menos um caractere especial.");
+            RuleFor(x => x.confirmPassword)
+                .Equal(x => x.newPassword).WithMessage("As senhas não coincidem.");
         }
     }
 }
