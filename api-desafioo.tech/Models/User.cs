@@ -12,10 +12,12 @@ namespace api_desafioo.tech.Models
         public string Password { get; private set; }
         public string[] Roles { get; private set; }
         public bool IsActivated { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+
+        public string RefreshToken { get; private set; }
+        public DateTime RefreshTokenExpiryTime { get; private set; }
 
         public ICollection<Challenge> Challenges { get; private set; }
-
-        public DateTime CreatedAt { get; private set; }
 
         public User(string name, string email, string password)
         {
@@ -43,6 +45,12 @@ namespace api_desafioo.tech.Models
         public void UpdateDescription(string newDescription)
         {
             Description = Markdown.ToHtml(newDescription); 
+        }
+
+        public void SetRefreshToken(string refreshToken, DateTime expiryTime)
+        {
+            RefreshToken = refreshToken;
+            RefreshTokenExpiryTime = expiryTime;
         }
     }
 }
