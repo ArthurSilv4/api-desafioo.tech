@@ -91,7 +91,7 @@ Siga os passos abaixo para clonar e rodar o projeto:
    ```
 5. **Executar o Projeto:**
 
-    - Selecione o projeto de inicialização (geralmente o projeto da API) no Solution Explorer.
+    - Selecione o projeto de inicialização no Solution Explorer.
     - Pressione F5 ou clique em "Start" para executar o projeto.
 
 Pronto! Agora você pode começar a desenvolver e explorar o projeto.
