@@ -75,10 +75,9 @@ Siga os passos abaixo para clonar e rodar o projeto:
     ```bash
     cd api-desafioo.tech
     ```
-1.	Abra o Visual Studio.
-2.	Clique em "Open a project or solution".
-3.	Navegue até o diretório do projeto clonado e selecione o arquivo de solução (.sln).
-
+  -	Abra o Visual Studio.
+  -	Clique em "Open a project or solution".
+  -	Navegue até o diretório do projeto clonado e selecione o arquivo de solução (.sln).
 
 3. **Execute o Docker Compose para iniciar os contêineres:**
 
@@ -90,8 +89,8 @@ Siga os passos abaixo para clonar e rodar o projeto:
 
 5. **Executar o Projeto:**
 
- 1.	Selecione o projeto de inicialização (geralmente o projeto da API) no Solution Explorer.
- 2.	Pressione F5 ou clique em "Start" para executar o projeto.
+ -	Selecione o projeto de inicialização (geralmente o projeto da API) no Solution Explorer.
+ -	Pressione F5 ou clique em "Start" para executar o projeto.
 
 Pronto! Agora você pode começar a desenvolver e explorar o projeto.
 
