@@ -56,3 +56,43 @@ Para acessar o repositório do front-end deste projeto, visite o [repositório d
 - ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)  
 
 Quer sugerir novas tecnologias ou contribuir com o projeto? Fique à vontade para abrir uma issue ou um pull request!
+
+
+
+
+## Instalação
+
+Siga os passos abaixo para clonar e rodar o projeto:
+
+1. **Clone o repositório:**
+
+    ```bash
+    git clone https://github.com/arthursilv4/api-desafioo.tech.git
+    ```
+
+2. **Acesse o diretório do projeto:**
+
+   ```bash
+   cd api-desafioo.tech
+   ```
+    
+   -	Abra o Visual Studio.
+   -	Clique em "Open a project or solution".
+   -	Navegue até o diretório do projeto clonado e selecione o arquivo de solução (.sln).
+
+3. **Execute o Docker Compose para iniciar os contêineres:**
+   ```bash
+   docker-compose up -d
+   ```
+4. **Aplicar as Migrações do Banco de Dados**
+
+   ```bash
+   dotnet ef database update
+   ```
+5. **Executar o Projeto:**
+
+    - Selecione o projeto de inicialização no Solution Explorer.
+    - Pressione F5 ou clique em "Start" para executar o projeto.
+
+Pronto! Agora você pode começar a desenvolver e explorar o projeto.
+
