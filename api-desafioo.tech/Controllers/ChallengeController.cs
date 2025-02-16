@@ -32,6 +32,29 @@ namespace api_desafioo.tech.Controllers
             return Ok(challengeDtos);
         }
 
+        [HttpGet("ListChallengeUser")]
+        [Authorize]
+        public async Task<IActionResult> ListChallengeUser(CancellationToken ct)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+            if (userIdClaim == null)
+            {
+                return Unauthorized();
+            }
+            if (!Guid.TryParse(userIdClaim.Value, out var userId))
+            {
+                return BadRequest("ID de usuário inválido.");
+            }
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId, ct);
+            if (user == null)
+            {
+                return NotFound("Usuário não encontrado.");
+            }
+            var challenges = await _context.Challenges.Where(c => c.AuthorId == userId).ToListAsync(ct);
+            var challengeDtos = challenges.Select(c => new ChallengeDto(c.Id, c.Title, c.Description, c.Dificulty, c.Category, c.AuthorName, c.Stars, c.Links)).ToList();
+            return Ok(challengeDtos);
+        }
+
         [HttpGet("ChallengeId")]
         public async Task<IActionResult> GetChallenge(Guid challengeId, CancellationToken ct)
         {
