@@ -9,7 +9,7 @@ namespace api_desafioo.tech.Models
         public string Title { get; private set; }
         public string Description { get; private set; }
         public string Dificulty { get; private set; }
-        public string Category { get; private set; }
+        public string[] Category { get; private set; }
         public int Stars { get; private set; }
         public List<string>? Links { get; private set; }
 
@@ -22,7 +22,7 @@ namespace api_desafioo.tech.Models
         private Challenge() { }
         
         
-        public Challenge(string title, string description, string dificulty, string category, User author, List<string>? links)
+        public Challenge(string title, string description, string dificulty, string[] category, User author, List<string>? links)
         {
             Id = Guid.NewGuid();
             Title = title;
@@ -42,7 +42,7 @@ namespace api_desafioo.tech.Models
             Stars++;
         }
 
-        public void Update(string title, string description, string dificulty, string category, List<string>? links)
+        public void Update(string title, string description, string dificulty, string[] category, List<string>? links)
         {
             Title = title;
             Description = Markdown.ToHtml(description);

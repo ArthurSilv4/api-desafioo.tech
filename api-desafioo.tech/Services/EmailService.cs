@@ -54,7 +54,7 @@ namespace api_desafioo.tech.Services
             }
         }
 
-        public bool SendChallengeStartedEmail(string to, string name, string challengeTitle, string description, string difficulty, string category, string author, List<string>? links)
+        public bool SendChallengeStartedEmail(string to, string name, string challengeTitle, string description, string difficulty, string[] category, string author, List<string>? links)
         {
             var subject = "Desafio iniciado";
             var body = $@"
@@ -95,10 +95,10 @@ namespace api_desafioo.tech.Services
                         </div>
                         <div class='content'>
                             <p>Olá {name},</p>
-                            <p>Você iniciou o desafio <strong>{challengeTitle}</strong>!</p>
+                            <p>Você iniciou o desafio: <strong>{challengeTitle}</strong>!</p>
                             <p>Descrição: {description}</p>
                             <p>Dificuldade: {difficulty}</p>
-                            <p>Categoria: {category}</p>
+                            <p>Categoria: {string.Join(", ", category)}</p>
                             <p>Autor: {author}</p>
                             <p>Links de apoio:</p>
                             <ul>

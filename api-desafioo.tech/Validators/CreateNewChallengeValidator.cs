@@ -1,10 +1,18 @@
 ﻿using api_desafioo.tech.Requests.ChallengeRequests;
 using FluentValidation;
+using System.Linq;
 
 namespace api_desafioo.tech.Validators
 {
     public class CreateNewChallengeValidator : AbstractValidator<CreateNewChallengeRequest>
     {
+        private static readonly string[] validCategories = new[]
+        {
+                    "Backend", "Frontend", "Fullstack", "Mobile", "Ciência de Dados", "DevOps", "Segurança", "IA/ML",
+                    "Desenvolvimento de Jogos", "Sistemas Embarcados", "IoT", "Blockchain", "AR/VR", "Computação em Nuvem",
+                    "Redes", "Banco de Dados", "Desenvolvimento Web", "Teste de Software", "Design UI/UX", "Gestão de Projetos"
+                };
+
         public CreateNewChallengeValidator()
         {
             RuleFor(c => c.title)
@@ -21,7 +29,7 @@ namespace api_desafioo.tech.Validators
                 .WithMessage("A dificuldade deve ser 'Facil', 'Media' ou 'Dificil'");
             RuleFor(c => c.category)
                 .NotEmpty()
-                .Must(c => new[] { "Backend", "Frontend", "Fullstack", "Mobile", "Ciência de Dados", "DevOps", "Segurança", "IA/ML", "Desenvolvimento de Jogos", "Sistemas Embarcados", "IoT", "Blockchain", "AR/VR", "Computação em Nuvem", "Redes", "Banco de Dados", "Desenvolvimento Web", "Teste de Software", "Design UI/UX", "Gestão de Projetos" }.Contains(c))
+                .Must(categories => categories.All(category => validCategories.Contains(category)))
                 .WithMessage("A categoria deve ser uma das seguintes: 'Backend', 'Frontend', 'Fullstack', 'Mobile', 'Ciência de Dados', 'DevOps', 'Segurança', 'IA/ML', 'Desenvolvimento de Jogos', 'Sistemas Embarcados', 'IoT', 'Blockchain', 'AR/VR', 'Computação em Nuvem', 'Redes', 'Banco de Dados', 'Desenvolvimento Web', 'Teste de Software', 'Design UI/UX', 'Gestão de Projetos'");
             RuleFor(c => c.links)
                 .Must(l => l == null || l.Count <= 5)
