@@ -28,8 +28,20 @@ namespace api_desafioo.tech.Controllers
         public async Task<IActionResult> ListChallenge(CancellationToken ct)
         {
             var challenges = await _context.Challenges.ToListAsync(ct);
-            var challengeDtos = challenges.Select(c => new ChallengeDto(c.Id, c.Title, c.Description, c.Dificulty, c.Category, c.AuthorName, c.Links)).ToList();
+            var challengeDtos = challenges.Select(c => new ChallengeDto(c.Id, c.Title, c.Description, c.Dificulty, c.Category, c.AuthorName, c.Stars, c.Links)).ToList();
             return Ok(challengeDtos);
+        }
+
+        [HttpGet("ChallengeId")]
+        public async Task<IActionResult> GetChallenge(Guid challengeId, CancellationToken ct)
+        {
+            var challenge = await _context.Challenges.FindAsync(new object[] { challengeId }, ct);
+            if (challenge == null)
+            {
+                return NotFound("Desafio não encontrado.");
+            }
+            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Stars, challenge.Links);
+            return Ok(challengeDto);
         }
 
         [HttpPost("StartChallenge")]
@@ -50,6 +62,7 @@ namespace api_desafioo.tech.Controllers
             {
                 existingParticipant.UpdateLastChallengeDate(DateTimeHelper.GetBrasiliaTime());
                 _context.ChallengeParticipants.Update(existingParticipant);
+                challenge.AddStar();
                 await _context.SaveChangesAsync(ct);
 
                 sendEmail = _email.SendChallengeStartedEmail(existingParticipant.Email, existingParticipant.Name, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
@@ -59,7 +72,7 @@ namespace api_desafioo.tech.Controllers
                     return BadRequest("Falha ao enviar e-mail.");
                 }
 
-                var challengedto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
+                var challengedto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Stars, challenge.Links);
                 var dto = new ChallengeParticipantDto(existingParticipant.Name, existingParticipant.Email, challengedto);
 
                 return Ok(new { message = "Desafio iniciado", dto });
@@ -68,6 +81,7 @@ namespace api_desafioo.tech.Controllers
             var newParticipant = new ChallengeParticipant(request.name, request.email, challengeId);
 
             await _context.ChallengeParticipants.AddAsync(newParticipant, ct);
+            challenge.AddStar();
             await _context.SaveChangesAsync(ct);
 
             sendEmail = _email.SendChallengeStartedEmail(newParticipant.Email, newParticipant.Name, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
@@ -77,8 +91,9 @@ namespace api_desafioo.tech.Controllers
                 return BadRequest("Falha ao enviar e-mail.");
             }
 
-            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
+            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Stars, challenge.Links);
             var Dto = new ChallengeParticipantDto(newParticipant.Name, newParticipant.Email, challengeDto);
+
 
             return Ok(new { message = "Desafio iniciado", Dto });
         }
@@ -105,7 +120,7 @@ namespace api_desafioo.tech.Controllers
             await _context.Challenges.AddAsync(challenge, ct);
             await _context.SaveChangesAsync(ct);
 
-            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
+            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Stars, challenge.Links);
 
             return Ok(challengeDto);
         }
@@ -141,7 +156,7 @@ namespace api_desafioo.tech.Controllers
             );
             _context.Challenges.Update(challenge);
             await _context.SaveChangesAsync(ct);
-            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
+            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Stars, challenge.Links);
             return Ok(new { message = "Desafio editado", challengeDto });
         }
 
@@ -170,7 +185,7 @@ namespace api_desafioo.tech.Controllers
             _context.Challenges.Remove(challenge);
             await _context.SaveChangesAsync(ct);
 
-            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Links);
+            var challengeDto = new ChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Stars, challenge.Links);
 
             return Ok(new { message = "Desafio excluido", challengeDto });
         }

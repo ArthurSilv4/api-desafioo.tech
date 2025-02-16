@@ -10,6 +10,7 @@ namespace api_desafioo.tech.Models
         public string Description { get; private set; }
         public string Dificulty { get; private set; }
         public string Category { get; private set; }
+        public int Stars { get; private set; }
         public List<string>? Links { get; private set; }
 
         public User Author { get; private set; }
@@ -32,7 +33,13 @@ namespace api_desafioo.tech.Models
             Author = author;
             AuthorId = author.Id;
             AuthorName = author.Name;
+            Stars = 0;
             Links = links ?? new List<string>();
+        }
+
+        public void AddStar()
+        {
+            Stars++;
         }
 
         public void Update(string title, string description, string dificulty, string category, List<string>? links)
