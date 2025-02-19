@@ -67,6 +67,15 @@ namespace api_desafioo.tech.Controllers
             return Ok(challengeDto);
         }
 
+        [HttpGet("ListAuthorsChallenge")]
+        public async Task<IActionResult> AuthorsChallenge(CancellationToken ct)
+        {
+            var authors = await _context.Challenges.Select(c => c.AuthorName).Distinct().ToListAsync(ct);
+
+
+            return Ok(authors);
+        }
+
         [HttpPost("StartChallenge")]
         public async Task<IActionResult> StartChallenge(Guid challengeId, StartChallengeRequest request, CancellationToken ct)
         {
