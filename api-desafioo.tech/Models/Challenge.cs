@@ -1,5 +1,4 @@
 ﻿using api_desafioo.tech.Helpers;
-using Markdig;
 
 namespace api_desafioo.tech.Models
 {
@@ -26,7 +25,7 @@ namespace api_desafioo.tech.Models
         {
             Id = Guid.NewGuid();
             Title = title;
-            Description = Markdown.ToHtml(description);
+            Description = description;
             Dificulty = dificulty;
             Category = category;
             CreatedAt = DateTimeHelper.GetBrasiliaTime();
@@ -45,7 +44,7 @@ namespace api_desafioo.tech.Models
         public void Update(string title, string description, string dificulty, string[] category, List<string>? links)
         {
             Title = title;
-            Description = Markdown.ToHtml(description);
+            Description = description;
             Dificulty = dificulty;
             Category = category;
             Links = links ?? new List<string>();
