@@ -1,5 +1,4 @@
 ﻿using api_desafioo.tech.Helpers;
-using Markdig;
 
 namespace api_desafioo.tech.Models
 {
@@ -46,7 +45,7 @@ namespace api_desafioo.tech.Models
 
         public void UpdateDescription(string newDescription)
         {
-            Description = Markdown.ToHtml(newDescription); 
+            Description = newDescription; 
         }
 
         public void SetRefreshToken(string refreshToken, DateTime expiryTime)
