@@ -1,5 +1,6 @@
 ﻿using api_desafioo.tech.Configurations;
 using api_desafioo.tech.Helpers;
+using Markdig;
 using System.Net.Mail;
 
 namespace api_desafioo.tech.Services
@@ -61,42 +62,119 @@ namespace api_desafioo.tech.Services
                 <html>
                 <head>
                     <style>
-                        body {{
-                            font-family: Arial, sans-serif;
+                        .markdown-container {{
+                            font-family: 'Arial', sans-serif;
                             line-height: 1.6;
                         }}
-                        .container {{
-                            width: 80%;
-                            margin: auto;
-                            padding: 20px;
-                            border: 1px solid #ddd;
-                            border-radius: 10px;
+                        .markdown-container h1 {{
+                            font-size: 2.2rem;
+                            font-weight: bold;
+                            margin-top: 1.5rem;
+                            margin-bottom: 1rem;
+                            color: #333;
+                        }}
+                        .markdown-container h2 {{
+                            font-size: 1.8rem;
+                            font-weight: bold;
+                            margin-top: 1.5rem;
+                            margin-bottom: 1rem;
+                            color: #444;
+                        }}
+                        .markdown-container h3 {{
+                            font-size: 1.5rem;
+                            font-weight: bold;
+                            margin-top: 1.5rem;
+                            margin-bottom: 1rem;
+                            color: #555;
+                        }}
+                        .markdown-container ul, .markdown-container ol {{
+                            margin-left: 2rem;
+                            padding-left: 1rem;
+                        }}
+                        .markdown-container li {{
+                            margin-bottom: 0.5rem;
+                            color: #555;
+                        }}
+                        .markdown-container a {{
+                            color: #007BFF;
+                            text-decoration: none;
+                            font-weight: 500;
+                        }}
+                        .markdown-container a:hover {{
+                            text-decoration: underline;
+                            color: #0056b3;
+                        }}
+                        .markdown-container blockquote {{
                             background-color: #f9f9f9;
+                            border-left: 5px solid #ccc;
+                            padding: 1rem;
+                            margin: 1rem 0;
+                            font-style: italic;
+                            color: #555;
                         }}
-                        .header {{
-                            text-align: center;
-                            padding-bottom: 20px;
+                        .markdown-container blockquote p {{
+                            margin: 0;
                         }}
-                        .content {{
-                            margin-top: 20px;
+                        .markdown-container code {{
+                            background-color: #f0f0f0;
+                            color: #d63384;
+                            padding: 0.2rem 0.4rem;
+                            border-radius: 4px;
+                            font-size: 1rem;
                         }}
-                        .footer {{
-                            margin-top: 30px;
-                            text-align: center;
-                            font-size: 0.9em;
-                            color: #777;
+                        .markdown-container pre code {{
+                            background-color: #2e2e2e;
+                            color: #f5f5f5;
+                            padding: 1rem;
+                            border-radius: 4px;
+                            overflow-x: auto;
+                            display: block;
+                            white-space: pre-wrap;
+                            word-wrap: break-word;
+                            font-size: 1rem;
+                        }}
+                        .markdown-container table {{
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 1rem;
+                            margin-bottom: 1rem;
+                        }}
+                        .markdown-container th, .markdown-container td {{
+                            border: 1px solid #ddd;
+                            padding: 0.5rem;
+                            text-align: left;
+                        }}
+                        .markdown-container th {{
+                            background-color: #f4f4f4;
+                            font-weight: bold;
+                            color: #333;
+                        }}
+                        .markdown-container td {{
+                            color: #555;
+                        }}
+                        .markdown-container img {{
+                            max-width: 100%;
+                            height: auto;
+                            display: block;
+                            margin: 1rem 0;
+                        }}
+                        .markdown-container ol {{
+                            list-style-type: decimal;
+                        }}
+                        .markdown-container ol li {{
+                            margin-bottom: 0.5rem;
                         }}
                     </style>
                 </head>
                 <body>
-                    <div class='container'>
+                    <div class='markdown-container'>
                         <div class='header'>
                             <h1>Desafio Iniciado!</h1>
                         </div>
                         <div class='content'>
                             <p>Olá {name},</p>
                             <p>Você iniciou o desafio: <strong>{challengeTitle}</strong>!</p>
-                            <p>Descrição: {description}</p>
+                            <p>Descrição: {Markdown.ToHtml(description)}</p>
                             <p>Dificuldade: {difficulty}</p>
                             <p>Categoria: {string.Join(", ", category)}</p>
                             <p>Autor: {author}</p>
