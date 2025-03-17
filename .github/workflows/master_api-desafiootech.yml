@@ -24,7 +24,7 @@ jobs:
           dotnet-version: '8.x'
 
       - name: Build with dotnet
-        run: dotnet build api-desafioo.tech.sln --configuration Release
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
         run: dotnet publish api-desafioo.tech.sln -c Release -o "${{env.DOTNET_ROOT}}/myapp"
