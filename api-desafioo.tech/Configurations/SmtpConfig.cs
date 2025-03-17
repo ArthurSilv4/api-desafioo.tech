@@ -11,12 +11,12 @@
 
         public static void Initialize(IConfiguration configuration)
         {
-            Host = configuration["Smtp:Host"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Host is missing");
-            Port = int.Parse(configuration["Smtp:Port"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Port is missing"));
-            Username = configuration["Smtp:Username"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Username is missing");
-            Name = configuration["Smtp:Name"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Name is missing");
-            Password = configuration["Smtp:Password"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Password is missing");
-            EnableSsl = bool.Parse(configuration["Smtp:EnableSsl"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:EnableSsl is missing"));
+            Host = configuration["Smtp_Host"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Host is missing");
+            Port = int.Parse(configuration["Smtp_Port"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Port is missing"));
+            Username = configuration["Smtp_Username"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Username is missing");
+            Name = configuration["Smtp_Name"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Name is missing");
+            Password = configuration["Smtp_Password"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Password is missing");
+            EnableSsl = bool.Parse(configuration["Smtp_EnableSsl"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:EnableSsl is missing"));
         }
     }
 }

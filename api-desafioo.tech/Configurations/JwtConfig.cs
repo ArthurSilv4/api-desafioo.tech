@@ -11,12 +11,12 @@
 
         public static void Initialize(IConfiguration configuration)
         {
-            PrivateKey = configuration["Jwt:PrivateKey"] ?? throw new ArgumentNullException(nameof(configuration), "Jwt:PrivateKey is missing");
-            Issuer = configuration["Jwt:Issuer"] ?? throw new ArgumentNullException(nameof(configuration), "Jwt:Issuer is missing");
-            Audience = configuration["Jwt:Audience"] ?? throw new ArgumentNullException(nameof(configuration), "Jwt:Audience is missing");
-            ExpirationInHours = int.Parse(configuration["Jwt:ExpirationInHours"] ?? throw new ArgumentNullException(nameof(configuration), "Jwt:ExpirationInHours is missing"));
+            PrivateKey = configuration["Jwt_PrivateKey"] ?? throw new ArgumentNullException(nameof(configuration), "Jwt:PrivateKey is missing");
+            Issuer = configuration["Jwt_Issuer"] ?? throw new ArgumentNullException(nameof(configuration), "Jwt:Issuer is missing");
+            Audience = configuration["Jwt_Audience"] ?? throw new ArgumentNullException(nameof(configuration), "Jwt:Audience is missing");
+            ExpirationInHours = int.Parse(configuration["Jwt_ExpirationInHours"] ?? throw new ArgumentNullException(nameof(configuration), "Jwt:ExpirationInHours is missing"));
         
-            RefreshTokenExpirationInDays = int.Parse(configuration["RefreshToken:ExpirationInDays"] ?? throw new ArgumentNullException(nameof(configuration), "RefreshToken:ExpirationInDays is missing"));
+            RefreshTokenExpirationInDays = int.Parse(configuration["Refresh_ExpirationInDays"] ?? throw new ArgumentNullException(nameof(configuration), "RefreshToken:ExpirationInDays is missing"));
         }
 }
 }
