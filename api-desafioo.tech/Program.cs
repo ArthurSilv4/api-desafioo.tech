@@ -84,9 +84,9 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddTransient<TokenService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection")));
+    options.UseSqlServer(builder.Configuration["SqlServerConnectionString"]));
 
-var redisConnectionString = builder.Configuration.GetConnectionString("RedisConnection");
+var redisConnectionString = builder.Configuration["RedisConnectionString"];
 if (string.IsNullOrWhiteSpace(redisConnectionString))
 {
     throw new ArgumentNullException("RedisConnection", "Connection string for Redis is missing");
