@@ -93,7 +93,6 @@ if (string.IsNullOrWhiteSpace(redisConnectionString))
 }
 builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
 
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("DevelopmentCorsPolicy", builder =>
@@ -105,7 +104,7 @@ builder.Services.AddCors(options =>
 
     options.AddPolicy("ProductionCorsPolicy", builder =>
     {
-        builder.WithOrigins("https://desafioo.tech")
+        builder.WithOrigins("https://desafioo.tech", "https://www.desafioo.tech")
                .AllowAnyMethod()
                .AllowAnyHeader();
     });
