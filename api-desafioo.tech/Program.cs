@@ -102,6 +102,13 @@ builder.Services.AddCors(options =>
                .AllowAnyMethod()
                .AllowAnyHeader();
     });
+
+    options.AddPolicy("ProductionCorsPolicy", builder =>
+    {
+        builder.WithOrigins("https://desafioo.tech")
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
 
 builder.Services.AddRateLimiter(options =>
@@ -131,6 +138,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("ProductionCorsPolicy");
 
 app.UseRateLimiter();
 
