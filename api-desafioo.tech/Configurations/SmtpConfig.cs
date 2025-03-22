@@ -2,6 +2,7 @@
 {
     public static class SmtpConfig
     {
+        public static string Email { get; private set; } = string.Empty;
         public static string Host { get; private set; } = string.Empty;
         public static int Port { get; private set; } = 0;
         public static string Username { get; private set; } = string.Empty;
@@ -11,6 +12,7 @@
 
         public static void Initialize(IConfiguration configuration)
         {
+            Email = configuration["Smtp_Email"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Email is missing");
             Host = configuration["Smtp_Host"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Host is missing");
             Port = int.Parse(configuration["Smtp_Port"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Port is missing"));
             Username = configuration["Smtp_Username"] ?? throw new ArgumentNullException(nameof(configuration), "Smtp:Username is missing");
