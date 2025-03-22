@@ -36,10 +36,21 @@ namespace api_desafioo.tech.tests.Services
             var jwtToken = tokenHandler.ReadJwtToken(token);
 
             JwtConfig.Issuer.Should().Be(jwtToken.Issuer);
-            JwtConfig.Audience.Should().Be(jwtToken.Audiences.First());
+            JwtConfig.Audience.Should().Be(jwtToken.Audiences.First()); // Fix: Use Audiences.First() instead of Audience
             JwtConfig.ExpirationInHours.Should().Be((int)jwtToken.ValidTo.Subtract(jwtToken.ValidFrom).TotalHours);
 
             _testOutputHelper.WriteLine($"Token: {token}");
+        }
+
+        [Fact]
+        public void TokenService_GenerateRefreshToken_ShouldReturnValidRefreshToken()
+        {
+            var tokenService = new TokenService();
+            var refreshToken = tokenService.GenerateRefreshToken();
+
+            Assert.False(string.IsNullOrEmpty(refreshToken), "RefreshToken should not be null or empty");
+
+            _testOutputHelper.WriteLine($"RefreshToken: {refreshToken}");
         }
     }
 }
