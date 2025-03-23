@@ -58,141 +58,116 @@ namespace api_desafioo.tech.Services
 
         public bool SendChallengeStartedEmail(string to, string name, string challengeTitle, string description, string difficulty, string[] category, string author, List<string>? links)
         {
-            var subject = "Desafio iniciado";
+            var subject = "Desafio Iniciado";
             var body = $@"
-                        <html>
-                        <head>
-                            <style>
-                                .markdown-container {{
-                                    font-family: 'Arial', sans-serif;
-                                    line-height: 1.6;
-                                }}
-                                .markdown-container h1 {{
-                                    font-size: 2.2rem;
-                                    font-weight: bold;
-                                    margin-top: 1.5rem;
-                                    margin-bottom: 1rem;
-                                    color: #333;
-                                }}
-                                .markdown-container h2 {{
-                                    font-size: 1.8rem;
-                                    font-weight: bold;
-                                    margin-top: 1.5rem;
-                                    margin-bottom: 1rem;
-                                    color: #444;
-                                }}
-                                .markdown-container h3 {{
-                                    font-size: 1.5rem;
-                                    font-weight: bold;
-                                    margin-top: 1.5rem;
-                                    margin-bottom: 1rem;
-                                    color: #555;
-                                }}
-                                .markdown-container ul, .markdown-container ol {{
-                                    margin-left: 2rem;
-                                    padding-left: 1rem;
-                                }}
-                                .markdown-container li {{
-                                    margin-bottom: 0.5rem;
-                                    color: #555;
-                                }}
-                                .markdown-container a {{
-                                    color: #007BFF;
-                                    text-decoration: none;
-                                    font-weight: 500;
-                                }}
-                                .markdown-container a:hover {{
-                                    text-decoration: underline;
-                                    color: #0056b3;
-                                }}
-                                .markdown-container blockquote {{
-                                    background-color: #f9f9f9;
-                                    border-left: 5px solid #ccc;
-                                    padding: 1rem;
-                                    margin: 1rem 0;
-                                    font-style: italic;
-                                    color: #555;
-                                }}
-                                .markdown-container blockquote p {{
-                                    margin: 0;
-                                }}
-                                .markdown-container code {{
-                                    background-color: #f0f0f0;
-                                    color: #d63384;
-                                    padding: 0.2rem 0.4rem;
-                                    border-radius: 4px;
-                                    font-size: 1rem;
-                                }}
-                                .markdown-container pre code {{
-                                    background-color: #2e2e2e;
-                                    color: #f5f5f5;
-                                    padding: 1rem;
-                                    border-radius: 4px;
-                                    overflow-x: auto;
-                                    display: block;
-                                    white-space: pre-wrap;
-                                    word-wrap: break-word;
-                                    font-size: 1rem;
-                                }}
-                                .markdown-container table {{
-                                    width: 100%;
-                                    border-collapse: collapse;
-                                    margin-top: 1rem;
-                                    margin-bottom: 1rem;
-                                }}
-                                .markdown-container th, .markdown-container td {{
-                                    border: 1px solid #ddd;
-                                    padding: 0.5rem;
-                                    text-align: left;
-                                }}
-                                .markdown-container th {{
-                                    background-color: #f4f4f4;
-                                    font-weight: bold;
-                                    color: #333;
-                                }}
-                                .markdown-container td {{
-                                    color: #555;
-                                }}
-                                .markdown-container img {{
-                                    max-width: 100%;
-                                    height: auto;
-                                    display: block;
-                                    margin: 1rem 0;
-                                }}
-                                .markdown-container ol {{
-                                    list-style-type: decimal;
-                                }}
-                                .markdown-container ol li {{
-                                    margin-bottom: 0.5rem;
-                                }}
-                            </style>
-                        </head>
-                        <body>
-                            <div class='markdown-container'>
-                                <div class='header'>
-                                    <h1>Desafio Iniciado!</h1>
-                                </div>
-                                <div class='content'>
-                                    <p>Olá {name},</p>
-                                    <p>Você iniciou o desafio: <strong>{challengeTitle}</strong>!</p>
-                                    <p>Descrição: {Markdown.ToHtml(description)}</p>
-                                    <p>Dificuldade: {difficulty}</p>
-                                    <p>Categoria: {string.Join(", ", category)}</p>
-                                    <p>Autor: {author}</p>
-                                    <p>Links de apoio:</p>
-                                    <ul>
-                                        {string.Join("", links?.Select(link => $"<li><a href='{link}'>{link}</a></li>") ?? Enumerable.Empty<string>())}
-                                    </ul>
-                                    <p>Estamos muito felizes em vê-lo(a) participar deste desafio. Desejamos a você boa sorte e esperamos que você aproveite a experiência.</p>
-                                </div>
-                                <div class='footer'>
-                                    <p>Atenciosamente,</p>
-                                    <p>Equipe Desafioo.tech</p>
-                                </div>
+                <html>
+                <head>
+                    <style>
+                        body {{
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            background-color: #f4f4f9;
+                            margin: 0;
+                            padding: 0;
+                        }}
+                        .container {{
+                            width: 100%;
+                            max-width: 600px;
+                            margin: 0 auto;
+                            background-color: #ffffff;
+                            padding: 20px;
+                            border-radius: 8px;
+                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                        }}
+                        .header {{
+                            text-align: center;
+                            background-color: #007bff;
+                            color: #ffffff;
+                            padding: 20px;
+                            border-radius: 8px 8px 0 0;
+                        }}
+                        .header h1 {{
+                            margin: 0;
+                            font-size: 2rem;
+                        }}
+                        .content {{
+                            padding: 20px;
+                        }}
+                        .content p {{
+                            font-size: 1rem;
+                            line-height: 1.6;
+                            color: #333333;
+                        }}
+                        .content strong {{
+                            color: #007bff;
+                        }}
+                        .links ul {{
+                            list-style-type: none;
+                            padding: 0;
+                        }}
+                        .links li {{
+                            margin-bottom: 10px;
+                        }}
+                        .links a {{
+                            color: #007bff;
+                            text-decoration: none;
+                            font-weight: 500;
+                        }}
+                        .links a:hover {{
+                            text-decoration: underline;
+                        }}
+                        .support {{
+                            background-color: #f9f9f9;
+                            border-left: 5px solid #007bff;
+                            padding: 10px 20px;
+                            margin-top: 20px;
+                            font-size: 1rem;
+                            color: #333333;
+                        }}
+                        .footer {{
+                            text-align: center;
+                            padding: 10px;
+                            font-size: 0.875rem;
+                            color: #777777;
+                            border-top: 1px solid #eeeeee;
+                            margin-top: 20px;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='container'>
+                        <div class='header'>
+                            <h1>Desafio Iniciado!</h1>
+                        </div>
+                        <div class='content'>
+                            <p>Olá {name},</p>
+                            <p>Você iniciou o desafio: <strong>{challengeTitle}</strong>!</p>
+                            <p><strong>Descrição:</strong> {Markdown.ToHtml(description)}</p>
+                            <p><strong>Dificuldade:</strong> {difficulty}</p>
+                            <p><strong>Categoria:</strong> {string.Join(", ", category)}</p>
+                            <p><strong>Autor:</strong> {author}</p>
+                            <div class='links'>
+                                <p><strong>Links de apoio:</strong></p>
+                                <ul>
+                                    {string.Join("", links?.Select(link => $"<li><a href='{link}'>{link}</a></li>") ?? Enumerable.Empty<string>())}
+                                </ul>
                             </div>
-                        </body>
-                        </html>";
+                            <div class='support'>
+                                <p><strong>Gostou do desafio? Apoie nosso projeto open source!</strong></p>
+                                <p>Nosso projeto é open source e depende do seu apoio para continuar crescendo e oferecendo desafios inovadores. Cada contribuição é fundamental para o sucesso da iniciativa!</p>
+                                <p><a href='https://apoia.se/desafiootech' target='_blank' style='font-weight: bold; color: #007bff; text-decoration: none;'>Clique aqui para apoiar</a></p>
+                                <p>Obrigado por participar! Boa sorte no desafio!</p>
+                            </div>
+                        </div>
+                        <div class='footer'>
+                            <p>Atenciosamente,</p>
+                            <p>Equipe Desafioo.tech</p>
+                        </div>
+                    </div>
+                </body>
+                </html>";
             return SendEmail(to, subject, body);
+
+
         }
 
         public bool SendConfirmationEmail(string to, string name, string confirmationCode)
