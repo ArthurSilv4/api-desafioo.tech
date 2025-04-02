@@ -49,5 +49,10 @@ namespace api_desafioo.tech.Models
             Category = category;
             Links = links ?? new List<string>();
         }
+
+        public void UpdateAuthorName(string newName)
+        {
+            AuthorName = newName;
+        }
     }
 }

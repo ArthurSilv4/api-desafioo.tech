@@ -94,10 +94,20 @@ namespace api_desafioo.tech.Controllers
                 return NotFound("Usuário não encontrado.");
             }
 
+            var challenges = await _context.Challenges.Where(c => c.AuthorId == userId).ToListAsync(ct);
+
+            foreach (var challenge in challenges)
+            {
+                challenge.UpdateAuthorName(request.newName);
+                _context.Challenges.Update(challenge);
+            }
+
             user.UpdateName(request.newName);
             _context.Users.Update(user);
+
             await _context.SaveChangesAsync(ct);
-            return Ok("Nome de usuário atualizado com sucesso.");
+
+            return Ok("Nome de usuário atualizado com sucesso em todos os desafios.");
         }
 
         [HttpPut("UpdateDescription")]
