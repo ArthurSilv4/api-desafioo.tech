@@ -33,7 +33,7 @@ namespace api_desafioo.tech.tests.Models
             Assert.Null(challenge.Description);
             Assert.Null(challenge.Dificulty);
             Assert.Null(challenge.Category);
-            Assert.Equal(0, challenge.Stars);
+            Assert.Equal(0, challenge.Starts);
             Assert.Null(challenge.Links);
             Assert.Null(challenge.Author);
             Assert.Equal(Guid.Empty, challenge.AuthorId);
@@ -44,7 +44,7 @@ namespace api_desafioo.tech.tests.Models
             _testOutputHelper.WriteLine($"Description: {challenge.Description}");
             _testOutputHelper.WriteLine($"Dificulty: {challenge.Dificulty}");
             _testOutputHelper.WriteLine($"Category:  {challenge.Category}");
-            _testOutputHelper.WriteLine($"Stars: {challenge.Stars}");
+            _testOutputHelper.WriteLine($"Stars: {challenge.Starts}");
             _testOutputHelper.WriteLine($"Links: {challenge.Links}");
             _testOutputHelper.WriteLine($"Author: {challenge.Author}");
             _testOutputHelper.WriteLine($"AuthorId: {challenge.AuthorId}");
@@ -79,7 +79,7 @@ namespace api_desafioo.tech.tests.Models
             challenge.Author.Should().Be(expectedAuthor);
             challenge.AuthorId.Should().Be(expectedAuthor.Id);
             challenge.AuthorName.Should().Be(expectedAuthor.Name);
-            challenge.Stars.Should().Be(0);
+            challenge.Starts.Should().Be(0);
             challenge.Links.Should().BeEquivalentTo(expectedLinks);
 
             _testOutputHelper.WriteLine($"Id: {challenge.Id}");
@@ -90,7 +90,7 @@ namespace api_desafioo.tech.tests.Models
             _testOutputHelper.WriteLine($"Author: {challenge.Author.Name}");
             _testOutputHelper.WriteLine($"AuthorId: {challenge.AuthorId}");
             _testOutputHelper.WriteLine($"AuthorName: {challenge.AuthorName}");
-            _testOutputHelper.WriteLine($"Stars: {challenge.Stars}");
+            _testOutputHelper.WriteLine($"Stars: {challenge.Starts}");
             _testOutputHelper.WriteLine($"Links: {string.Join(", ", challenge.Links)}");
         }
 
@@ -114,11 +114,11 @@ namespace api_desafioo.tech.tests.Models
             var challenge = new Challenge(expectedTitle, expectedDescription, expectedDificulty, expectedCategory, expectedAuthor, expectedLinks);
 
             challenge.AddStar();
-            challenge.Stars.Should().Be(1);
+            challenge.Starts.Should().Be(1);
             challenge.AddStar();
-            challenge.Stars.Should().Be(2);
+            challenge.Starts.Should().Be(2);
 
-            _testOutputHelper.WriteLine($"Stars: {challenge.Stars}");
+            _testOutputHelper.WriteLine($"Stars: {challenge.Starts}");
         }
 
         [Fact]
