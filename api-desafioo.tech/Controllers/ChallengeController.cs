@@ -32,6 +32,23 @@ namespace api_desafioo.tech.Controllers
             return Ok(challengeDtos);
         }
 
+        [HttpGet("AuthorInformations")]
+        public async Task<IActionResult> AuthorInformations(Guid challengeId, CancellationToken ct)
+        {
+            var challenge = await _context.Challenges.FindAsync(new object[] { challengeId }, ct);
+            if (challenge == null)
+            {
+                return NotFound("Desafio não encontrado.");
+            }
+            var author = await _context.Users.FindAsync(new object[] { challenge.AuthorId }, ct);
+            if (author == null)
+            {
+                return NotFound("Autor não encontrado.");
+            }
+            var authorDto = new { author.Name, author.Description };
+            return Ok(authorDto);
+        }
+
         [HttpGet("ListChallengeUser")]
         [Authorize]
         public async Task<IActionResult> ListChallengeUser(CancellationToken ct)
