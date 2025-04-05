@@ -47,9 +47,9 @@ namespace api_desafioo.tech.Controllers
             var userDto = new UserDto(user.Name, user.Description, user.Email, user.Roles);
             return Ok(userDto);
         }
-      
+
         [HttpPost("CreateNewUser")]
-        [Authorize(Roles = "Admin")]
+        [Authorize]
         public async Task<IActionResult> CreateNewUser([FromBody] CreateNewUserRequest request, CancellationToken ct)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -58,8 +58,10 @@ namespace api_desafioo.tech.Controllers
                 return Unauthorized();
             }
 
-            var userRoleClaim = User.FindFirst(ClaimTypes.Role);
-            if (userRoleClaim == null || userRoleClaim.Value != "Admin")
+            var userRoleClaims = User.FindAll(ClaimTypes.Role)
+                .SelectMany(c => c.Value.Split(','))
+                .ToArray();
+            if (!userRoleClaims.Any(role => role.Equals("Admin", StringComparison.OrdinalIgnoreCase)))
             {
                 return Forbid("Você não tem permissão para criar um novo usuário.");
             }
