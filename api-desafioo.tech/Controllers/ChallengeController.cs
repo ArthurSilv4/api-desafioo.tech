@@ -7,7 +7,10 @@ using api_desafioo.tech.Requests.ChallengeRequests;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
+using StackExchange.Redis;
 using System.Security.Claims;
+using System.Text.Json;
 
 namespace api_desafioo.tech.Controllers
 {
@@ -17,18 +20,38 @@ namespace api_desafioo.tech.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IEmail _email;
+        private readonly IConnectionMultiplexer _cache;
 
-        public ChallengeController(AppDbContext context, IEmail email)
+        public ChallengeController(AppDbContext context, IEmail email, IConnectionMultiplexer cache)
         {
             _context = context;
             _email = email;
+            _cache = cache;
         }
 
         [HttpGet("ListChallenge")]
         public async Task<IActionResult> ListChallenge(CancellationToken ct)
         {
+            var cacheKey = "ListChallenge";
+            var db = _cache.GetDatabase();
+            var cachedChallenges = await db.StringGetAsync(cacheKey);
+
+            if (!cachedChallenges.IsNullOrEmpty)
+            {
+                return Ok(JsonSerializer.Deserialize<List<ChallengeDto>>(cachedChallenges.ToString() ?? string.Empty));
+            }
+
             var challenges = await _context.Challenges.ToListAsync(ct);
             var challengeDtos = challenges.Select(c => new ChallengeDto(c.Id, c.Title, c.Description, c.Dificulty, c.Category, c.AuthorName, c.Starts, c.Links)).ToList();
+
+            var serializedChallenges = JsonSerializer.Serialize(challengeDtos);
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10) 
+            };
+
+            await db.StringSetAsync(cacheKey, serializedChallenges, cacheOptions.AbsoluteExpirationRelativeToNow);
+
             return Ok(challengeDtos);
         }
 
