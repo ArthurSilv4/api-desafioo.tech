@@ -38,6 +38,4 @@ jobs:
           dotnet test
 
       - name: 🧹 Encerrar containers
-        run: |
-          cd ..
-          docker-compose down
+        run: docker-compose down
