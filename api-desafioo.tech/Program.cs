@@ -13,140 +13,150 @@ using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using StackExchange.Redis;
 
-var builder = WebApplication.CreateBuilder(args);
-
-JwtConfig.Initialize(builder.Configuration);
-SmtpConfig.Initialize(builder.Configuration);
-
-builder.Services.AddControllers();
-
-builder.Services.AddFluentValidationAutoValidation()
-                .AddFluentValidationClientsideAdapters();
-
-builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddTransient<IEmail, EmailService>();
-
-builder.Services.AddSwaggerGen(options =>
+public class Program
 {
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
+    public static void Main(string[] args)
     {
-        Title = "Desafioo.tech API",
-        Version = "v1",
-        Description = "API para o desafioo.tech"
-    });
+        var builder = WebApplication.CreateBuilder(args);
 
-    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
-    {
-        Description = "Autorização JWT - Bearer JWT",
-        Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Scheme = "Bearer",
-        BearerFormat = "Jwt",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-    });
+        JwtConfig.Initialize(builder.Configuration);
+        SmtpConfig.Initialize(builder.Configuration);
 
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement()
-    {
+        builder.Services.AddControllers();
+
+        builder.Services.AddFluentValidationAutoValidation()
+                        .AddFluentValidationClientsideAdapters();
+
+        builder.Services.AddValidatorsFromAssemblyContaining<LoginValidator>();
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddTransient<IEmail, EmailService>();
+
+        builder.Services.AddSwaggerGen(options =>
         {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
+            options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
             {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference()
+                Title = "Desafioo.tech API",
+                Version = "v1",
+                Description = "API para o desafioo.tech"
+            });
+
+            options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
+            {
+                Description = "Autorização JWT - Bearer JWT",
+                Name = "Authorization",
+                Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+                BearerFormat = "Jwt",
+                In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+            });
+
+            options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement()
+            {
                 {
-                    Id = "Bearer",
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme
+                    new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
+                    {
+                        Reference = new Microsoft.OpenApi.Models.OpenApiReference()
+                        {
+                            Id = "Bearer",
+                            Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme
+                        }
+                    },
+                    new List<string>()
                 }
-            },
-            new List<string>()
-        }
-    });
-});
+            });
+        });
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = JwtConfig.Issuer,
-        ValidAudience = JwtConfig.Audience,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtConfig.PrivateKey))
-    };
-});
-
-builder.Services.AddTransient<TokenService>();
-
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration["SqlServerConnectionString"]));
-
-var redisConnectionString = builder.Configuration["RedisConnectionString"];
-if (string.IsNullOrWhiteSpace(redisConnectionString))
-{
-    throw new ArgumentNullException("RedisConnection", "Connection string for Redis is missing");
-}
-builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("DevelopmentCorsPolicy", builder =>
-    {
-        builder.AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-
-    options.AddPolicy("ProductionCorsPolicy", builder =>
-    {
-        builder.WithOrigins("https://desafioo.tech", "https://www.desafioo.tech")
-               .AllowAnyMethod()
-               .AllowAnyHeader();
-    });
-});
-
-builder.Services.AddRateLimiter(options =>
-{
-    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
-        RateLimitPartition.GetFixedWindowLimiter("Fixed", _ => new FixedWindowRateLimiterOptions
+        builder.Services.AddAuthentication(options =>
         {
-            PermitLimit = 100,
-            Window = TimeSpan.FromMinutes(1),
-            QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
-            QueueLimit = 2
-        })
-    );
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = JwtConfig.Issuer,
+                ValidAudience = JwtConfig.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(JwtConfig.PrivateKey))
+            };
+        });
 
-    options.OnRejected = async (context, CancellationToken) =>
-    {
-        context.HttpContext.Response.StatusCode = 429;
-        await context.HttpContext.Response.WriteAsJsonAsync(new { Message = "Limite de requisições atingido. Tente novamente mais tarde." });
-    };
-});
+        builder.Services.AddTransient<TokenService>();
 
-var app = builder.Build();
+        if (!builder.Environment.IsEnvironment("Testing"))
+        {
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration["SqlServerConnectionString"]));
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseCors("DevelopmentCorsPolicy");
-    app.UseSwagger();
-    app.UseSwaggerUI();
+            var redisConnectionString = builder.Configuration["RedisConnectionString"];
+            if (string.IsNullOrWhiteSpace(redisConnectionString))
+            {
+                throw new ArgumentNullException("RedisConnection", "Connection string for Redis is missing");
+            }
+            builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnectionString));
+        }
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("DevelopmentCorsPolicy", builder =>
+            {
+                builder.AllowAnyOrigin()
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+
+            options.AddPolicy("ProductionCorsPolicy", builder =>
+            {
+                builder.WithOrigins("https://desafioo.tech", "https://www.desafioo.tech")
+                       .AllowAnyMethod()
+                       .AllowAnyHeader();
+            });
+        });
+
+        builder.Services.AddRateLimiter(options =>
+        {
+            options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+                RateLimitPartition.GetFixedWindowLimiter("Fixed", _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 100,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+                    QueueLimit = 2
+                })
+            );
+
+            options.OnRejected = async (context, CancellationToken) =>
+            {
+                context.HttpContext.Response.StatusCode = 429;
+                await context.HttpContext.Response.WriteAsJsonAsync(new { Message = "Limite de requisições atingido. Tente novamente mais tarde." });
+            };
+        });
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseCors("DevelopmentCorsPolicy");
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+        app.UseCors("ProductionCorsPolicy");
+
+        app.UseRateLimiter();
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
+
+    }
 }
-
-app.UseCors("ProductionCorsPolicy");
-
-app.UseRateLimiter();
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
