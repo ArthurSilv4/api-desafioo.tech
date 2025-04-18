@@ -244,5 +244,197 @@ namespace api_desafioo.tech.tests.Controllers
             _testOutputHelper.WriteLine(JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true }));
         }
 
+        [Fact]
+        public async Task ChallengeId_ShouldReturnChallenge_WhenChallengeExists()
+        {
+            var challenge = await CreateChallengeAsync();
+
+            var response = await _client.GetAsync($"/api/Challenge/ChallengeId?challengeId={challenge.Id}");
+
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadFromJsonAsync<ChallengeDto>();
+
+            content.Should().NotBeNull();
+            content.title.Should().Be(challenge.Title);
+            content.description.Should().Be(challenge.Description);
+            content.dificulty.Should().Be(challenge.Dificulty);
+            content.category.Should().BeEquivalentTo(challenge.Category);
+            content.links.Should().BeEquivalentTo(challenge.Links);
+
+            _testOutputHelper.WriteLine(JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true }));
+        }
+
+        [Fact]
+        public async Task ChallengeId_ShouldReturnNotFound_WhenChallengeDoesNotExist()
+        {
+            var response = await _client.GetAsync("/api/Challenge/ChallengeId?challengeId=00000000-0000-0000-0000-000000000000");
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+
+            var content = await response.Content.ReadAsStringAsync();
+
+            content.Should().Contain("Desafio não encontrado.");
+
+            _testOutputHelper.WriteLine(content);
+        }
+
+        [Fact]
+        public async Task ListAuthorsChallenge_ShouldReturnAuthorsChallenges_WhenCalled()
+        {
+            await CreateChallengeAsync();
+
+            var response = await _client.GetAsync($"/api/Challenge/ListAuthorsChallenge");
+
+            response.EnsureSuccessStatusCode();
+            
+            var content = await response.Content.ReadAsStringAsync();
+
+            content.Should().NotBeNull();
+
+            _testOutputHelper.WriteLine(content);
+        }
+        [Fact]
+        public async Task StartChallenge_ShouldStartChallengeAndSendEmail_WhenParticipantIsNew()
+        {
+            var mockEmail = new Mock<IEmail>();
+            mockEmail
+                .Setup(e => e.SendChallengeStartedEmail(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string[]>(),
+                    It.IsAny<string>(),
+                    It.IsAny<List<string>>()))
+                .Returns(true);
+
+            var client = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
+                    services.AddTransient(_ => mockEmail.Object);
+                });
+            }).CreateClient();
+
+            var challenge = await CreateChallengeAsync();
+            var request = new
+            {
+                name = _faker.Person.FullName,
+                email = _faker.Internet.Email()
+            };
+
+            var response = await client.PostAsJsonAsync($"/api/Challenge/StartChallenge?challengeId={challenge.Id}", request);
+
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+
+            content.Should().NotBeNull();
+            content.GetProperty("message").GetString().Should().Be("Desafio iniciado");
+
+            mockEmail.Verify(e => e.SendChallengeStartedEmail(
+                request.email,
+                request.name,
+                challenge.Title,
+                challenge.Description,
+                challenge.Dificulty,
+                challenge.Category,
+                challenge.AuthorName,
+                challenge.Links), Times.Once);
+
+            _testOutputHelper.WriteLine(JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true }));
+        }
+
+
+        [Fact]
+        public async Task StartChallenge_ShouldUpdateParticipantAndSendEmail_WhenParticipantExists()
+        {
+            var mockEmail = new Mock<IEmail>();
+            mockEmail
+                .Setup(e => e.SendChallengeStartedEmail(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string[]>(),
+                    It.IsAny<string>(),
+                    It.IsAny<List<string>>()))
+                .Returns(true);
+
+            var client = _factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
+                    services.AddTransient(_ => mockEmail.Object);
+                });
+            }).CreateClient();
+
+            var challenge = await CreateChallengeAsync();
+            var existingParticipant = new ChallengeParticipant(
+                _faker.Person.FullName,
+                _faker.Internet.Email(),
+                challenge.Id
+            );
+
+            using (var scope = _factory.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+                await dbContext.ChallengeParticipants.AddAsync(existingParticipant);
+                await dbContext.SaveChangesAsync();
+            }
+
+            var request = new
+            {
+                name = existingParticipant.Name,
+                email = existingParticipant.Email
+            };
+
+            var response = await client.PostAsJsonAsync($"/api/Challenge/StartChallenge?challengeId={challenge.Id}", request);
+
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+
+            content.Should().NotBeNull();
+            content.GetProperty("message").GetString().Should().Be("Desafio iniciado");
+            var dto = content.GetProperty("dto");
+            dto.GetProperty("name").GetString().Should().Be(existingParticipant.Name);
+            dto.GetProperty("email").GetString().Should().Be(existingParticipant.Email);
+            dto.GetProperty("challenge").GetProperty("title").GetString().Should().Be(challenge.Title);
+
+            mockEmail.Verify(e => e.SendChallengeStartedEmail(
+                existingParticipant.Email,
+                existingParticipant.Name,
+                challenge.Title,
+                challenge.Description,
+                challenge.Dificulty,
+                challenge.Category,
+                challenge.AuthorName,
+                challenge.Links), Times.Once);
+
+            _testOutputHelper.WriteLine(JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true }));
+        }
+
+
+        [Fact]
+        public async Task StartChallenge_ShouldReturnNotFound_WhenChallengeDoesNotExist()
+        {
+            var request = new
+            {
+                name = _faker.Person.FullName,
+                email = _faker.Internet.Email()
+            };
+
+            var response = await _client.PostAsJsonAsync("/api/Challenge/StartChallenge?challengeId=00000000-0000-0000-0000-000000000000", request);
+
+            response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
+            var content = await response.Content.ReadAsStringAsync();
+            content.Should().Contain("Desafio não encontrado.");
+
+            _testOutputHelper.WriteLine(content);
+        }
+
+        
+
     }
 }
