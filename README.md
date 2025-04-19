@@ -33,6 +33,32 @@ Este projeto é uma plataforma onde professores e profissionais da área podem c
 
 Se você acredita no potencial deste projeto e deseja contribuir para seu crescimento, pode apoiar financeiramente através da nossa página de apoio. Sua contribuição ajudará na manutenção, desenvolvimento de novas funcionalidades e melhorias na plataforma. Qualquer valor é bem-vindo e faz a diferença para tornar essa iniciativa ainda mais acessível.
 
+## Arquitetura do Projeto
+
+Este projeto é baseado em uma API desenvolvida em **.NET Core / ASP.NET**, utilizando autenticação por token JWT, banco de dados **SQL Server**, cache com **Redis** e envio de e-mails via **SMTP**.
+
+
+
+                    ┌───────────────────────────┐
+                    │         Front-end         │
+                    │          (React)          │
+                    └────────────┬──────────────┘
+                                 │
+                         🔐 Auth Token (JWT)
+                                 │
+                    ┌────────────▼──────────────┐
+                    │         API .NET          │
+                    │   (.NET Core / ASP.NET)   │
+                    └────────────┬──────────────┘
+                                 │
+            ┌────────────────────┼────────────────────┐
+            │                    │                    │
+    ┌───────▼───────┐    ┌───────▼────────┐   ┌───────▼───────┐
+    │   SQL Server  │    │     Redis      │   │     SMTP      │
+    │  (Dados App)  │    │    (Cache)     │   │ (Envio Email) │
+    └───────────────┘    └────────────────┘   └───────────────┘
+                         
+
 ## Tecnologias
 
 Este projeto foi desenvolvido com as seguintes tecnologias:
@@ -96,3 +122,8 @@ Siga os passos abaixo para clonar e rodar o projeto:
 
 Pronto! Agora você pode começar a desenvolver e explorar o projeto.
 
+## Contato
+
+Se você tiver dúvidas, sugestões ou feedback, por favor, abra uma **issue** neste repositório. Fique à vontade para compartilhar suas ideias ou relatar problemas diretamente no [GitHub Issues](https://github.com/arthursilv4/api-desafioo.tech/issues).
+
+Eu ficarei feliz em ajudar e melhorar o projeto com sua colaboração!
