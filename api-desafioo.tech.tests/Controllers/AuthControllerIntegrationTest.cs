@@ -127,12 +127,12 @@ namespace api_desafioo.tech.tests.Controllers
 
             var content = await response.Content.ReadFromJsonAsync<JsonElement>();
 
-            content.TryGetProperty("token", out _).Should().BeTrue();
-            content.TryGetProperty("refreshToken", out _).Should().BeTrue();
+            content.TryGetProperty("newToken", out _).Should().BeTrue();
+            content.TryGetProperty("newRefreshToken", out _).Should().BeTrue();
 
             _testOutputHelper.WriteLine($"Status Code: {response.StatusCode}");
-            _testOutputHelper.WriteLine($"Token: {content.GetProperty("token").GetString()}");
-            _testOutputHelper.WriteLine($"RefreshToken: {content.GetProperty("refreshToken").GetString()}");
+            _testOutputHelper.WriteLine($"Token: {content.GetProperty("newToken").GetString()}");
+            _testOutputHelper.WriteLine($"RefreshToken: {content.GetProperty("newRefreshToken").GetString()}");
         }
 
         [Fact]
