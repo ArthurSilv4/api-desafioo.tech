@@ -293,6 +293,7 @@ namespace api_desafioo.tech.tests.Controllers
 
             _testOutputHelper.WriteLine(content);
         }
+
         [Fact]
         public async Task StartChallenge_ShouldStartChallengeAndSendEmail_WhenParticipantIsNew()
         {
@@ -344,7 +345,6 @@ namespace api_desafioo.tech.tests.Controllers
 
             _testOutputHelper.WriteLine(JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true }));
         }
-
 
         [Fact]
         public async Task StartChallenge_ShouldUpdateParticipantAndSendEmail_WhenParticipantExists()
@@ -415,7 +415,6 @@ namespace api_desafioo.tech.tests.Controllers
             _testOutputHelper.WriteLine(JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true }));
         }
 
-
         [Fact]
         public async Task StartChallenge_ShouldReturnNotFound_WhenChallengeDoesNotExist()
         {
@@ -434,7 +433,36 @@ namespace api_desafioo.tech.tests.Controllers
             _testOutputHelper.WriteLine(content);
         }
 
-        
+        [Fact]
+        public async Task CreateNewChallenge_ShouldReturnCreatedChallenge_WhenRequestIsValid()
+        {
+            var token = await GetAuthenticationTokenAsync();
+            var client = _factory.CreateClient();
 
+            client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+
+            var request = new
+            {
+                title = _faker.Lorem.Sentence(3),
+                description = _faker.Lorem.Paragraph(5),
+                dificulty = _faker.PickRandom(new[] { "Facil", "Media", "Dificil" }),
+                category = new[] { "Backend" },
+                links = new List<string> { _faker.Internet.Url(), _faker.Internet.Url() }
+            };
+
+            var response = await client.PostAsJsonAsync("/api/Challenge/CreateNewChallenge", request);
+
+            response.EnsureSuccessStatusCode();
+            var content = await response.Content.ReadFromJsonAsync<ChallengeDto>();
+
+            content.Should().NotBeNull();
+            content.title.Should().Be(request.title);
+            content.description.Should().Be(request.description);
+            content.dificulty.Should().Be(request.dificulty);
+            content.category.Should().BeEquivalentTo(request.category);
+            content.links.Should().BeEquivalentTo(request.links);
+
+            _testOutputHelper.WriteLine(JsonSerializer.Serialize(content, new JsonSerializerOptions { WriteIndented = true }));
+        }
     }
 }
