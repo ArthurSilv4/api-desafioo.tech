@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using api_desafioo.tech.Services;
 using api_desafioo.tech.Requests.AuthRequests;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
 using api_desafioo.tech.Configurations;
+using api_desafioo.tech.Dtos.AuthDtos;
 
 namespace api_desafioo.tech.Controllers
 {
@@ -23,6 +23,7 @@ namespace api_desafioo.tech.Controllers
         }
 
         [HttpPost("Login")]
+        [ProducesResponseType(typeof(LoginDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken ct)
         {
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == request.email, ct);
@@ -38,10 +39,16 @@ namespace api_desafioo.tech.Controllers
 
             await _context.SaveChangesAsync(ct);
 
-            return Ok(new { token, refreshToken });
+            var loginDto = new LoginDto(
+                Token: token,
+                RefreshToken: refreshToken
+            );
+
+            return Ok(loginDto);
         }
 
         [HttpPost("RefreshToken")]
+        [ProducesResponseType(typeof(RefreshTokenDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenRequest request, CancellationToken ct)
         {
             var principal = _tokenService.GetPrincipalFromExpiredToken(request.Token);
@@ -62,7 +69,12 @@ namespace api_desafioo.tech.Controllers
 
             await _context.SaveChangesAsync(ct);
 
-            return Ok(new { token = newToken, refreshToken = newRefreshToken });
+            var RefreshTokenDto = new RefreshTokenDto(
+                NewToken: newToken,
+                NewRefreshToken: newRefreshToken
+            );
+
+            return Ok(RefreshTokenDto);
         }
     }
 }

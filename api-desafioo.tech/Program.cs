@@ -12,6 +12,7 @@ using api_desafioo.tech.Helpers;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using StackExchange.Redis;
+using System.Reflection;
 
 public class Program
 {
@@ -34,11 +35,20 @@ public class Program
 
         builder.Services.AddSwaggerGen(options =>
         {
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
+
             options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
             {
-                Title = "Desafioo.tech API",
+                Title = "Desafioo.Tech API",
                 Version = "v1",
-                Description = "API para o desafioo.tech"
+                Description = "API para o desafioo.tech",
+                Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                {
+                    Name = "Desafioo.Tech",
+                    Url = new Uri("https://desafioo.tech"),
+                }
             });
 
             options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
