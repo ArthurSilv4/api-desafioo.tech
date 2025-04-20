@@ -11,7 +11,7 @@ namespace api_desafioo.tech.Controllers
         [ProducesResponseType(typeof(DateTime), StatusCodes.Status200OK)]
         public IActionResult Ping()
         {
-            var dateTime = DateTimeHelper.GetBrasiliaTime();
+            var dateTime = DateTime.UtcNow;
             return Ok(dateTime);
         }
     }

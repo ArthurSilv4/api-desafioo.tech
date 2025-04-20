@@ -37,8 +37,8 @@ namespace api_desafioo.tech.tests.Models
             challengeParticipant.Id.Should().NotBeEmpty();
             challengeParticipant.Name.Should().Be(expectedName);
             challengeParticipant.Email.Should().Be(expectedEmail);
-            challengeParticipant.FirstChallengeDate.Should().BeCloseTo(DateTimeHelper.GetBrasiliaTime(), TimeSpan.FromMilliseconds(1000));
-            challengeParticipant.LastChallengeDate.Should().BeCloseTo(DateTimeHelper.GetBrasiliaTime(), TimeSpan.FromMilliseconds(1000));
+            challengeParticipant.FirstChallengeDate.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(1000));
+            challengeParticipant.LastChallengeDate.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(1000));
             challengeParticipant.Challenges.Should().BeEmpty();
             challengeParticipant.ChallengeId.Should().Be(expectedChallengeId);
 
@@ -65,7 +65,7 @@ namespace api_desafioo.tech.tests.Models
             );
             var expectedChallengeId = expectedChallenge.Id;
             var challengeParticipant = new ChallengeParticipant(expectedName, expectedEmail, expectedChallengeId);
-            var newDate = DateTimeHelper.GetBrasiliaTime().AddDays(1);
+            var newDate = DateTime.UtcNow.AddDays(1);
 
             challengeParticipant.UpdateLastChallengeDate(newDate);
 

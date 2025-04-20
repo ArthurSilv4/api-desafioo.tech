@@ -138,7 +138,7 @@ namespace api_desafioo.tech.Controllers
                 .SingleOrDefaultAsync(p => p.Email == request.email, ct);
             if (existingParticipant != null)
             {
-                existingParticipant.UpdateLastChallengeDate(DateTimeHelper.GetBrasiliaTime());
+                existingParticipant.UpdateLastChallengeDate(DateTime.UtcNow);
                 _context.ChallengeParticipants.Update(existingParticipant);
                 challenge.AddStar();
                 await _context.SaveChangesAsync(ct);

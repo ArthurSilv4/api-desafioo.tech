@@ -27,7 +27,7 @@ namespace api_desafioo.tech.Models
             Password = password;
             Roles = new string[] { "User" };
             IsActivated = true;
-            CreatedAt = DateTimeHelper.GetBrasiliaTime();
+            CreatedAt = DateTime.UtcNow;
             Challenges = new List<Challenge>();
             RefreshToken = "";
             RefreshTokenExpiryTime = DateTime.MinValue;

@@ -19,8 +19,8 @@ namespace api_desafioo.tech.Models
             Id = Guid.NewGuid();
             Name = name;
             Email = email;
-            FirstChallengeDate = DateTimeHelper.GetBrasiliaTime();
-            LastChallengeDate = DateTimeHelper.GetBrasiliaTime();
+            FirstChallengeDate = DateTime.UtcNow;
+            LastChallengeDate = DateTime.UtcNow;
             Challenges = new List<Challenge>();
             ChallengeId = challengeId;
         }

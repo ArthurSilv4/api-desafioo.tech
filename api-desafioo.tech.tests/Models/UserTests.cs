@@ -33,7 +33,7 @@ namespace api_desafioo.tech.tests.Models
             user.Password.Should().Be(expectedPassword);
             user.Roles.Should().BeEquivalentTo(new[] { "User" });
             user.IsActivated.Should().BeTrue();
-            user.CreatedAt.Should().BeCloseTo(DateTimeHelper.GetBrasiliaTime(), TimeSpan.FromMilliseconds(1000));
+            user.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMilliseconds(1000));
             user.Challenges.Should().BeEmpty();
             user.RefreshToken.Should().BeEmpty();
             user.RefreshTokenExpiryTime.Should().Be(DateTime.MinValue);
@@ -106,7 +106,7 @@ namespace api_desafioo.tech.tests.Models
             var expectedPassword = _faker.Internet.Password();
             var user = new User(expectedName, expectedEmail, expectedPassword);
             var expectedRefreshToken = _faker.Random.AlphaNumeric(32);
-            var expectedExpiryTime = DateTimeHelper.GetBrasiliaTime().AddDays(1);
+            var expectedExpiryTime = DateTime.UtcNow.AddDays(1);
 
             user.SetRefreshToken(expectedRefreshToken, expectedExpiryTime);
 
