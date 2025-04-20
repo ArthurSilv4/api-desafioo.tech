@@ -1,5 +1,5 @@
 ﻿using api_desafioo.tech.Context;
-using api_desafioo.tech.Dto;
+using api_desafioo.tech.Dtos.ChallengeDtos;
 using api_desafioo.tech.Helpers;
 using api_desafioo.tech.Models;
 using Bogus;
@@ -397,7 +397,7 @@ namespace api_desafioo.tech.tests.Controllers
 
             content.Should().NotBeNull();
             content.GetProperty("message").GetString().Should().Be("Desafio iniciado");
-            var dto = content.GetProperty("dto");
+            var dto = content.GetProperty("startChallengeDto");
             dto.GetProperty("name").GetString().Should().Be(existingParticipant.Name);
             dto.GetProperty("email").GetString().Should().Be(existingParticipant.Email);
             dto.GetProperty("challenge").GetProperty("title").GetString().Should().Be(challenge.Title);

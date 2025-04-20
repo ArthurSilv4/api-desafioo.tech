@@ -1,5 +1,5 @@
 ﻿using api_desafioo.tech.Context;
-using api_desafioo.tech.Dto;
+using api_desafioo.tech.Dtos.UserDtos;
 using api_desafioo.tech.Helpers;
 using api_desafioo.tech.Models;
 using api_desafioo.tech.Requests.UserRequests;
@@ -28,6 +28,7 @@ namespace api_desafioo.tech.Controllers
 
         [HttpGet]
         [Authorize]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetUser(CancellationToken ct)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -50,6 +51,7 @@ namespace api_desafioo.tech.Controllers
 
         [HttpPost("CreateNewUser")]
         [Authorize]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateNewUser([FromBody] CreateNewUserRequest request, CancellationToken ct)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -77,6 +79,7 @@ namespace api_desafioo.tech.Controllers
 
         [HttpPut("UpdateUserName")]
         [Authorize]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateUserName([FromBody] UpdateUserNameRequest request, CancellationToken ct)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -114,6 +117,7 @@ namespace api_desafioo.tech.Controllers
 
         [HttpPut("UpdateDescription")]
         [Authorize]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateDescription([FromBody] UpdateDescriptionRequest request, CancellationToken ct)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -138,6 +142,7 @@ namespace api_desafioo.tech.Controllers
 
         [HttpPost("SendConfirmationEmail")]
         [Authorize]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> SendConfirmationEmail(CancellationToken ct)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
@@ -173,6 +178,7 @@ namespace api_desafioo.tech.Controllers
 
         [HttpPut("UpdatePassword")]
         [Authorize]
+        [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request, CancellationToken ct)
         {
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);

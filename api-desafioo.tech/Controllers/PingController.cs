@@ -8,6 +8,7 @@ namespace api_desafioo.tech.Controllers
     public class PingController : ControllerBase
     {
         [HttpGet]
+        [ProducesResponseType(typeof(DateTime), StatusCodes.Status200OK)]
         public IActionResult Ping()
         {
             var dateTime = DateTimeHelper.GetBrasiliaTime();
