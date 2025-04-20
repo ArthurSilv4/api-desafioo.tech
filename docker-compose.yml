@@ -16,17 +16,19 @@ services:
 
 
   database-desafioo.tech:
-    container_name: SqlServer
-    image: mcr.microsoft.com/azure-sql-edge
+    container_name: Postgres
+    image: postgres:15
     environment:
-      - ACCEPT_EULA=1
-      - MSSQL_SA_PASSWORD=Password123 
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Password123
+      - POSTGRES_DB=desafiootech
     volumes:
-      - dbdata:/var/opt/mssql
+      - dbdata:/var/lib/postgresql/data
     ports:
-        - 1433:1433
+      - "5432:5432"
     networks:
-        - desafio.tech-network
+      - desafio.tech-network
+
 
   cache-desafioo.tech:
     container_name: Redis
