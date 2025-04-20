@@ -100,7 +100,7 @@ public class Program
         if (!builder.Environment.IsEnvironment("Testing"))
         {
             builder.Services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(builder.Configuration["SqlServerConnectionString"]));
+                options.UseNpgsql(builder.Configuration["PostgresConnectionString"]));
 
             var redisConnectionString = builder.Configuration["RedisConnectionString"];
             if (string.IsNullOrWhiteSpace(redisConnectionString))
