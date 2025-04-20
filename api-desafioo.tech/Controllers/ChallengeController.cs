@@ -1,6 +1,4 @@
-﻿using api_desafioo.tech.Configurations;
-using api_desafioo.tech.Context;
-using api_desafioo.tech.Dto;
+﻿using api_desafioo.tech.Context;
 using api_desafioo.tech.Dtos.ChallengeDtos;
 using api_desafioo.tech.Helpers;
 using api_desafioo.tech.Models;
