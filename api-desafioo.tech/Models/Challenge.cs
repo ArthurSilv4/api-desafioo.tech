@@ -28,7 +28,7 @@ namespace api_desafioo.tech.Models
             Description = description;
             Dificulty = dificulty;
             Category = category;
-            CreatedAt = DateTimeHelper.GetBrasiliaTime();
+            CreatedAt = DateTime.UtcNow;
             Author = author;
             AuthorId = author.Id;
             AuthorName = author.Name;

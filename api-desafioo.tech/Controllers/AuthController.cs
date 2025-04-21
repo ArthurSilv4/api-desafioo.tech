@@ -35,7 +35,7 @@ namespace api_desafioo.tech.Controllers
 
             var token = _tokenService.GenerateToken(user);
             var refreshToken = _tokenService.GenerateRefreshToken();
-            user.SetRefreshToken(refreshToken, DateTime.Now.AddDays(JwtConfig.RefreshTokenExpirationInDays));
+            user.SetRefreshToken(refreshToken, DateTime.UtcNow.AddDays(JwtConfig.RefreshTokenExpirationInDays));
 
             await _context.SaveChangesAsync(ct);
 
@@ -58,14 +58,14 @@ namespace api_desafioo.tech.Controllers
                 return Unauthorized();
             }
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == Guid.Parse(userId), ct);
-            if (user == null || user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            if (user == null || user.RefreshToken != request.RefreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 return Unauthorized();
             }
 
             var newToken = _tokenService.GenerateToken(user);
             var newRefreshToken = _tokenService.GenerateRefreshToken();
-            user.SetRefreshToken(newRefreshToken, DateTime.Now.AddDays(JwtConfig.RefreshTokenExpirationInDays));
+            user.SetRefreshToken(newRefreshToken, DateTime.UtcNow.AddDays(JwtConfig.RefreshTokenExpirationInDays));
 
             await _context.SaveChangesAsync(ct);
 
