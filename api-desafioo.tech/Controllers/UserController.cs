@@ -49,20 +49,6 @@ namespace api_desafioo.tech.Controllers
             return Ok(userDto);
         }
 
-        [HttpPost("UserAdm")]
-        public async Task<IActionResult> UserAdm([FromBody] CancellationToken ct)
-        {
-            
-            
-            
-            
-            var newUser = new User("Arthur", "arthurdesouza.silv@gmail.com", BCrypt.Net.BCrypt.HashPassword("S1s2s3s4s5@"));
-            await _context.Users.AddAsync(newUser, ct);
-            await _context.SaveChangesAsync(ct);
-            var userDto = new UserDto(newUser.Name, newUser.Description, newUser.Email, newUser.Roles);
-            return Ok(userDto);
-        }
-
         [HttpPost("CreateNewUser")]
         [Authorize]
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
