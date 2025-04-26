@@ -54,6 +54,8 @@ namespace api_desafioo.tech.Controllers
         [ProducesResponseType(typeof(UserDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> CreateNewUser([FromBody] CreateNewUserRequest request, CancellationToken ct)
         {
+            var newUserEmail = request.email.ToLowerInvariant();
+
             var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             if (userIdClaim == null)
             {
@@ -68,7 +70,7 @@ namespace api_desafioo.tech.Controllers
                 return Forbid("Você não tem permissão para criar um novo usuário.");
             }
 
-            var user = new User(request.name, request.email, BCrypt.Net.BCrypt.HashPassword(request.password));
+            var user = new User(request.name, newUserEmail, BCrypt.Net.BCrypt.HashPassword(request.password));
             await _context.Users.AddAsync(user, ct);
             await _context.SaveChangesAsync(ct);
 
