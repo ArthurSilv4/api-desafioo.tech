@@ -26,7 +26,9 @@ namespace api_desafioo.tech.Controllers
         [ProducesResponseType(typeof(LoginDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken ct)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == request.email, ct);
+            var userEmail = request.email.ToLowerInvariant();
+
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email == userEmail, ct);
 
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.password, user.Password))
             {
