@@ -138,6 +138,11 @@ namespace api_desafioo.tech.Controllers
                 .SingleOrDefaultAsync(p => p.Email == request.email, ct);
             if (existingParticipant != null)
             {
+                if (existingParticipant.Name != request.name)
+                {
+                    existingParticipant.UpdateName(request.name);
+                }
+
                 existingParticipant.UpdateLastChallengeDate(DateTime.UtcNow);
                 _context.ChallengeParticipants.Update(existingParticipant);
                 challenge.AddStar();
@@ -198,6 +203,21 @@ namespace api_desafioo.tech.Controllers
             var challenge = new Challenge(request.title, request.description, request.dificulty, request.category, user, request.links);
             await _context.Challenges.AddAsync(challenge, ct);
             await _context.SaveChangesAsync(ct);
+
+            var cacheKey = "ListChallenge";
+            var db = _cache.GetDatabase();
+
+            var challenges = await _context.Challenges.ToListAsync(ct);
+            var listChallengeDto = challenges.Select(c => new ListChallengeDto(c.Id, c.Title, c.Description, c.Dificulty, c.Category, c.AuthorName, c.Starts, c.Links)).ToList();
+
+            var serializedChallenges = JsonSerializer.Serialize(listChallengeDto);
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+            };
+
+            await db.StringSetAsync(cacheKey, serializedChallenges, cacheOptions.AbsoluteExpirationRelativeToNow);
+        
 
             var CreateNewChallengeDto = new CreateNewChallengeDto(challenge.Id, challenge.Title, challenge.Description, challenge.Dificulty, challenge.Category, challenge.AuthorName, challenge.Starts, challenge.Links);
 

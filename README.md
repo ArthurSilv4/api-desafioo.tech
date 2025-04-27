@@ -54,7 +54,7 @@ Este projeto é baseado em uma API desenvolvida em **.NET Core / ASP.NET**, util
             ┌────────────────────┼────────────────────┐
             │                    │                    │
     ┌───────▼───────┐    ┌───────▼────────┐   ┌───────▼───────┐
-    │   SQL Server  │    │     Redis      │   │     SMTP      │
+    │   Postgres    │    │     Redis      │   │     SMTP      │
     │  (Dados App)  │    │    (Cache)     │   │ (Envio Email) │
     └───────────────┘    └────────────────┘   └───────────────┘
                          
@@ -63,27 +63,14 @@ Este projeto é baseado em uma API desenvolvida em **.NET Core / ASP.NET**, util
 
 Este projeto foi desenvolvido com as seguintes tecnologias:
 
-### **Back-end**  
-Para acessar o repositório do back-end deste projeto, visite o [repositório do back-end](https://github.com/arthursilv4/api-desafioo.tech). Lá você encontrará o código-fonte, instruções de instalação e configuração, bem como informações sobre como contribuir para o desenvolvimento do back-end da plataforma.
-
 - ![C#](https://img.shields.io/badge/C%23-512BD4?style=for-the-badge&logo=csharp&logoColor=white)  
 - ![ASP.NET](https://img.shields.io/badge/ASP.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)  
 - ![Entity Framework](https://img.shields.io/badge/Entity%20Framework-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)  
-- ![SQL Server](https://img.shields.io/badge/SQL%20Server-CC2927?style=for-the-badge&logo=microsoft-sql-server&logoColor=white)  
+- ![Postgres](https://img.shields.io/badge/Postgres-336791?style=for-the-badge&logo=postgresql&logoColor=white)  
 - ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)  
 - ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)  
 
-### **Front-end**  
-Para acessar o repositório do front-end deste projeto, visite o [repositório do front-end](https://github.com/arthursilv4/front-desafioo.tech). Lá você encontrará o código-fonte, instruções de instalação e configuração, bem como informações sobre como contribuir para o desenvolvimento do front-end da plataforma.
-
-- ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)  
-- ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)  
-- ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)  
-- ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)  
-
 Quer sugerir novas tecnologias ou contribuir com o projeto? Fique à vontade para abrir uma issue ou um pull request!
-
-
 
 
 ## Instalação
