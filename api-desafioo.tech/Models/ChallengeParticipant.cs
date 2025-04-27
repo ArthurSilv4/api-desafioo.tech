@@ -25,6 +25,10 @@ namespace api_desafioo.tech.Models
             ChallengeId = challengeId;
         }
 
+        public void UpdateName(string newName)
+        {
+            Name = newName;
+        }
         public void UpdateLastChallengeDate(DateTime newDate)
         {
             LastChallengeDate = newDate;

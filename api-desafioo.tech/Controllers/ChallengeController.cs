@@ -138,6 +138,11 @@ namespace api_desafioo.tech.Controllers
                 .SingleOrDefaultAsync(p => p.Email == request.email, ct);
             if (existingParticipant != null)
             {
+                if (existingParticipant.Name != request.name)
+                {
+                    existingParticipant.UpdateName(request.name);
+                }
+
                 existingParticipant.UpdateLastChallengeDate(DateTime.UtcNow);
                 _context.ChallengeParticipants.Update(existingParticipant);
                 challenge.AddStar();
