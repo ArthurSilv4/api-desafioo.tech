@@ -1,116 +1,136 @@
-<p align="center">
-  <h1 align="center">Desafioo.tech</h1>
-  <p align="center">
-    ✨ <a href="https://desafioo.tech">https://desafioo.tech</a> ✨
-    <br/>
-    Participe do Desafio Tech e aprimore suas habilidades técnicas, resolvendo problemas reais e destacando-se no mercado.
-  </p>
-</p>
-<br/>
-<p align="center">
-  <a href="" rel="nofollow"><img src="https://img.shields.io/badge/created%20by-@ArthurSilv4-4BBAAB.svg" alt="Criado por Arthur Souza"></a>
-  <a href="https://opensource.org/licenses/MIT" rel="nofollow"><img src="https://img.shields.io/github/license/ArthurSilv4/api-desafioo.tech" alt="License"></a>
-  <a href="https://github.com/arthursilv4/api-desafioo.tech" rel="nofollow"><img src="https://img.shields.io/github/stars/arthursilv4/api-desafioo.tech" alt="stars"></a>
-</p>
+# Desafioo.tech - API
 
-<div align="center">
-  <a href="">Documentation</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://github.com/arthursilv4/api-desafioo.tech/issues/new">Issues</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="">@ArthurSilv4</a>
-  <br />
-</div>
+[![License](https://img.shields.io/github/license/ArthurSilv4/api-desafioo.tech)](https://opensource.org/licenses/MIT)
+[![Stars](https://img.shields.io/github/stars/arthursilv4/api-desafioo.tech)](https://github.com/arthursilv4/api-desafioo.tech)
+[![Documentation](https://img.shields.io/badge/Documentation-Online-brightgreen)](https://arthursilv4.github.io/api-desafioo.tech/)
 
-<br/>
-<br/>
+**Desafioo.tech** é uma plataforma open-source para criação e resolução de desafios de programação, conectando profissionais, professores e estudantes.
 
-## Introdução
+> **Este repositório contém apenas o backend da plataforma.**  
+> Para acessar o frontend, visite: [https://github.com/ArthurSilv4/front-desafioo.tech](https://github.com/ArthurSilv4/front-desafioo.tech)
 
-Este projeto é uma plataforma onde professores e profissionais da área podem criar desafios para os usuários explorarem e aplicarem seus conhecimentos na prática. O objetivo é conectar aprendizado e experiência real por meio de desafios reais.
+Acesse a plataforma: [https://desafioo.tech](https://desafioo.tech)
 
-## Apoiadores
+---
 
-Se você acredita no potencial deste projeto e deseja contribuir para seu crescimento, pode apoiar financeiramente através da nossa página de apoio. Sua contribuição ajudará na manutenção, desenvolvimento de novas funcionalidades e melhorias na plataforma. Qualquer valor é bem-vindo e faz a diferença para tornar essa iniciativa ainda mais acessível.
+## Sumário
 
-## Arquitetura do Projeto
+1. [Funcionalidades](#1---funcionalidades)
+2. [Tecnologias](#2---tecnologias)
+3. [Arquitetura](#3---arquitetura)
+4. [Instalação](#4---instalação)
+5. [Apoiadores](#5---apoiadores)
+6. [Contribuições](#6---contribuições)
+7. [Contato](#7---contato)
 
-Este projeto é baseado em uma API desenvolvida em **.NET Core / ASP.NET**, utilizando autenticação por token JWT, banco de dados **SQL Server**, cache com **Redis** e envio de e-mails via **SMTP**.
+---
 
+## 1 - Funcionalidades <a name="1---funcionalidades"></a>
 
+- Cadastro e autenticação de usuários (JWT)
+- Criação, edição e remoção de desafios por professores/profissionais
+- Exploração e inscrição em desafios por usuários
+- Envio de notificações por e-mail (SMTP)
+- Feedbacks e comentários em desafios
+- Sistema de cache para performance (Redis)
+- Administração de usuários e desafios
+- API RESTful documentada
 
-                    ┌───────────────────────────┐
-                    │         Front-end         │
-                    │          (React)          │
-                    └────────────┬──────────────┘
-                                 │
-                         🔐 Auth Token (JWT)
-                                 │
-                    ┌────────────▼──────────────┐
-                    │         API .NET          │
-                    │   (.NET Core / ASP.NET)   │
-                    └────────────┬──────────────┘
-                                 │
-            ┌────────────────────┼────────────────────┐
-            │                    │                    │
-    ┌───────▼───────┐    ┌───────▼────────┐   ┌───────▼───────┐
-    │   Postgres    │    │     Redis      │   │     SMTP      │
-    │  (Dados App)  │    │    (Cache)     │   │ (Envio Email) │
-    └───────────────┘    └────────────────┘   └───────────────┘
-                         
+---
 
-## Tecnologias
+## 2 - Tecnologias <a name="2---tecnologias"></a>
 
-Este projeto foi desenvolvido com as seguintes tecnologias:
+- ![C#](https://img.shields.io/badge/C%23-512BD4?style=for-the-badge&logo=csharp&logoColor=white)
+- ![ASP.NET](https://img.shields.io/badge/ASP.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+- ![Entity Framework](https://img.shields.io/badge/Entity%20Framework-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)
+- ![Postgres](https://img.shields.io/badge/Postgres-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+- ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+- ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-- ![C#](https://img.shields.io/badge/C%23-512BD4?style=for-the-badge&logo=csharp&logoColor=white)  
-- ![ASP.NET](https://img.shields.io/badge/ASP.NET-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)  
-- ![Entity Framework](https://img.shields.io/badge/Entity%20Framework-512BD4?style=for-the-badge&logo=dotnet&logoColor=white)  
-- ![Postgres](https://img.shields.io/badge/Postgres-336791?style=for-the-badge&logo=postgresql&logoColor=white)  
-- ![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)  
-- ![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)  
+---
 
-Quer sugerir novas tecnologias ou contribuir com o projeto? Fique à vontade para abrir uma issue ou um pull request!
+## 3 - Arquitetura <a name="3---arquitetura"></a>
 
+```text
+                ┌───────────────────────────┐
+                │         Front-end         │
+                │          (React)          │
+                └────────────┬──────────────┘
+                             │
+                     🔐 Auth Token (JWT)
+                             │
+                ┌────────────▼──────────────┐
+                │         API .NET          │
+                │   (.NET Core / ASP.NET)   │
+                └────────────┬──────────────┘
+                             │
+        ┌────────────────────┼────────────────────┐
+        │                    │                    │
+┌───────▼───────┐    ┌───────▼────────┐   ┌───────▼───────┐
+│   Postgres    │    │     Redis      │   │     SMTP      │
+│  (Dados App)  │    │    (Cache)     │   │ (Envio Email) │
+└───────────────┘    └────────────────┘   └───────────────┘
+```
 
-## Instalação
+---
 
-Siga os passos abaixo para clonar e rodar o projeto:
+## 4 - Instalação <a name="4---instalação"></a>
+
+Siga os passos abaixo para rodar o projeto localmente:
 
 1. **Clone o repositório:**
-
     ```bash
     git clone https://github.com/arthursilv4/api-desafioo.tech.git
     ```
 
 2. **Acesse o diretório do projeto:**
-
-   ```bash
-   cd api-desafioo.tech
-   ```
-    
-   -	Abra o Visual Studio.
-   -	Clique em "Open a project or solution".
-   -	Navegue até o diretório do projeto clonado e selecione o arquivo de solução (.sln).
+    ```bash
+    cd api-desafioo.tech
+    ```
+    - Abra o Visual Studio.
+    - Clique em "Open a project or solution".
+    - Selecione o arquivo `.sln` do projeto.
 
 3. **Execute o Docker Compose para iniciar os contêineres:**
-   ```bash
-   docker-compose up -d
-   ```
-4. **Aplicar as Migrações do Banco de Dados**
+    ```bash
+    docker-compose up -d
+    ```
 
-   ```bash
-   dotnet ef database update
-   ```
-5. **Executar o Projeto:**
+4. **Aplique as migrações do banco de dados:**
+    ```bash
+    dotnet ef database update
+    ```
 
+5. **Execute o projeto:**
     - Selecione o projeto de inicialização no Solution Explorer.
-    - Pressione F5 ou clique em "Start" para executar o projeto.
+    - Pressione F5 ou clique em "Start".
 
 Pronto! Agora você pode começar a desenvolver e explorar o projeto.
 
-## Contato
+---
 
-Se você tiver dúvidas, sugestões ou feedback, por favor, abra uma **issue** neste repositório. Fique à vontade para compartilhar suas ideias ou relatar problemas diretamente no [GitHub Issues](https://github.com/arthursilv4/api-desafioo.tech/issues).
+## 5 - Apoiadores <a name="5---apoiadores"></a>
 
-Eu ficarei feliz em ajudar e melhorar o projeto com sua colaboração!
+Se você acredita no potencial deste projeto e deseja contribuir para seu crescimento, pode apoiar financeiramente através da nossa [**página de apoio**](https://apoia.se/desafiootech).  
+Sua contribuição ajudará na manutenção, desenvolvimento de novas funcionalidades e melhorias na plataforma.
+
+**Qualquer valor é bem-vindo e faz a diferença para tornar essa iniciativa ainda mais acessível.**
+
+---
+
+## 6 - Contribuições <a name="6---contribuições"></a>
+
+Contribuições são bem-vindas!  
+Abra uma issue, envie um pull request ou compartilhe feedbacks.
+
+---
+
+## 7 - Contato <a name="7---contato"></a>
+
+Se você tiver dúvidas, sugestões ou feedback, por favor, abra uma **issue** neste repositório.  
+Fique à vontade para compartilhar suas ideias ou relatar problemas diretamente no [GitHub Issues](https://github.com/arthursilv4/api-desafioo.tech/issues).
+
+---
+
+**Obrigado por acessar o Desafioo.tech!**  
+Estamos empolgados em tê-lo aqui e esperamos que você aproveite ao máximo a plataforma.
