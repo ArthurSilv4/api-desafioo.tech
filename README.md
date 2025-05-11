@@ -1,9 +1,5 @@
 # Desafioo.tech - API
 
-[![License](https://img.shields.io/github/license/ArthurSilv4/api-desafioo.tech)](https://opensource.org/licenses/MIT)
-[![Stars](https://img.shields.io/github/stars/arthursilv4/api-desafioo.tech)](https://github.com/arthursilv4/api-desafioo.tech)
-[![Documentation](https://img.shields.io/badge/Documentation-Online-brightgreen)](https://arthursilv4.github.io/api-desafioo.tech/)
-
 **Desafioo.tech** é uma plataforma open-source para criação e resolução de desafios de programação, conectando profissionais, professores e estudantes.
 
 > **Este repositório contém apenas o backend da plataforma.**  
